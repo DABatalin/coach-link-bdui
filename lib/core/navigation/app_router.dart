@@ -1,41 +1,48 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/dashboard/presentation/screens/athlete_dashboard_screen.dart';
-import '../../features/dashboard/presentation/screens/coach_dashboard_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/connections/presentation/screens/athletes_list_screen.dart';
 import '../../features/connections/presentation/screens/find_coach_screen.dart';
 import '../../features/connections/presentation/screens/my_coach_screen.dart';
 import '../../features/connections/presentation/screens/pending_requests_screen.dart';
+import '../../features/dashboard/presentation/screens/athlete_dashboard_screen.dart';
+import '../../features/dashboard/presentation/screens/coach_dashboard_screen.dart';
 import '../../features/groups/presentation/screens/group_detail_screen.dart';
 import '../../features/groups/presentation/screens/groups_list_screen.dart';
+import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/reports/presentation/screens/submit_report_screen.dart';
+import '../../features/reports/presentation/screens/view_report_screen.dart';
 import '../../features/training/presentation/screens/archived_assignments_screen.dart';
 import '../../features/training/presentation/screens/assignment_detail_screen.dart';
 import '../../features/training/presentation/screens/athlete_assignments_screen.dart';
 import '../../features/training/presentation/screens/coach_assignments_screen.dart';
 import '../../features/training/presentation/screens/create_plan_screen.dart';
 import '../../features/training/presentation/screens/templates_screen.dart';
-import '../../features/reports/presentation/screens/submit_report_screen.dart';
-import '../../features/reports/presentation/screens/view_report_screen.dart';
-import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../auth/auth_state.dart';
 import '../di/auth_providers.dart';
 import 'routes.dart';
 import 'shell_scaffold.dart';
+
+/// Wraps a widget in a [NoTransitionPage] to eliminate push animation
+/// when switching between bottom nav tabs.
+Page<void> _noTransition(Widget child) =>
+    NoTransitionPage<void>(child: child);
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
   return GoRouter(
     initialLocation: AppRoutes.login,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false,
     redirect: (context, state) {
       final auth = authState.valueOrNull;
-      final isOnAuth = state.matchedLocation == AppRoutes.login ||
-          state.matchedLocation == AppRoutes.register;
+      final loc = state.matchedLocation;
+      final isOnAuth =
+          loc == AppRoutes.login || loc == AppRoutes.register;
 
       if (auth == null || auth is AuthInitial) return null;
       if (auth is Unauthenticated && !isOnAuth) return AppRoutes.login;
@@ -44,17 +51,15 @@ final routerProvider = Provider<GoRouter>((ref) {
             ? AppRoutes.coachDashboard
             : AppRoutes.athleteDashboard;
       }
+      // Coach cannot access athlete routes
       if (auth is Authenticated && auth.isCoach) {
-        if (state.matchedLocation.startsWith('/athlete')) {
-          return AppRoutes.coachDashboard;
-        }
+        if (loc.startsWith('/athlete')) return AppRoutes.coachDashboard;
       }
+      // Athlete cannot access coach routes
       if (auth is Authenticated && auth.isAthlete) {
-        if (state.matchedLocation.startsWith('/coach')) {
-          return AppRoutes.athleteDashboard;
-        }
+        if (loc.startsWith('/coach')) return AppRoutes.athleteDashboard;
       }
-      if (state.matchedLocation == '/' && auth is Authenticated) {
+      if (loc == '/' && auth is Authenticated) {
         return auth.isCoach
             ? AppRoutes.coachDashboard
             : AppRoutes.athleteDashboard;
@@ -71,7 +76,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const RegisterScreen(),
       ),
 
-      // Coach shell
+      // ── Coach shell ──────────────────────────────────────────────
       ShellRoute(
         builder: (_, state, child) => ShellScaffold(
           currentLocation: state.matchedLocation,
@@ -79,22 +84,27 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: child,
         ),
         routes: [
+          // Tab routes — no transition
           GoRoute(
             path: AppRoutes.coachDashboard,
-            builder: (_, __) => const CoachDashboardScreen(),
+            pageBuilder: (_, __) => _noTransition(const CoachDashboardScreen()),
           ),
           GoRoute(
             path: AppRoutes.coachAssignments,
-            builder: (_, __) => const CoachAssignmentsScreen(),
+            pageBuilder: (_, __) =>
+                _noTransition(const CoachAssignmentsScreen()),
           ),
           GoRoute(
             path: AppRoutes.coachGroups,
-            builder: (_, __) => const GroupsListScreen(),
+            pageBuilder: (_, __) =>
+                _noTransition(const GroupsListScreen(isCoach: true)),
           ),
           GoRoute(
-            path: AppRoutes.profile,
-            builder: (_, __) => const ProfileScreen(),
+            path: AppRoutes.coachProfile,
+            pageBuilder: (_, __) => _noTransition(const ProfileScreen()),
           ),
+
+          // Secondary routes (push transition is fine)
           GoRoute(
             path: AppRoutes.coachAthletes,
             builder: (_, __) => const AthletesListScreen(),
@@ -106,12 +116,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.coachAssignmentDetail,
             builder: (_, state) => AssignmentDetailScreen(
-                assignmentId: state.pathParameters['id']!, isCoach: true),
+              assignmentId: state.pathParameters['id']!,
+              isCoach: true,
+            ),
           ),
           GoRoute(
             path: AppRoutes.coachAssignmentReport,
-            builder: (_, state) => ViewReportScreen(
-                assignmentId: state.pathParameters['id']!),
+            builder: (_, state) =>
+                ViewReportScreen(assignmentId: state.pathParameters['id']!),
           ),
           GoRoute(
             path: AppRoutes.coachArchived,
@@ -131,17 +143,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: AppRoutes.coachGroupDetail,
-            builder: (_, state) => GroupDetailScreen(
-                groupId: state.pathParameters['id']!),
+            builder: (_, state) =>
+                GroupDetailScreen(groupId: state.pathParameters['id']!),
           ),
           GoRoute(
-            path: AppRoutes.notifications,
+            path: AppRoutes.coachNotifications,
             builder: (_, __) => const NotificationsScreen(),
           ),
         ],
       ),
 
-      // Athlete shell
+      // ── Athlete shell ─────────────────────────────────────────────
       ShellRoute(
         builder: (_, state, child) => ShellScaffold(
           currentLocation: state.matchedLocation,
@@ -149,27 +161,37 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: child,
         ),
         routes: [
+          // Tab routes — no transition
           GoRoute(
             path: AppRoutes.athleteDashboard,
-            builder: (_, __) => const AthleteDashboardScreen(),
+            pageBuilder: (_, __) =>
+                _noTransition(const AthleteDashboardScreen()),
           ),
           GoRoute(
             path: AppRoutes.athleteAssignments,
-            builder: (_, __) => const AthleteAssignmentsScreen(),
+            pageBuilder: (_, __) =>
+                _noTransition(const AthleteAssignmentsScreen()),
           ),
           GoRoute(
             path: AppRoutes.athleteGroups,
-            builder: (_, __) => const GroupsListScreen(),
+            pageBuilder: (_, __) => _noTransition(const GroupsListScreen()),
           ),
+          GoRoute(
+            path: AppRoutes.athleteProfile,
+            pageBuilder: (_, __) => _noTransition(const ProfileScreen()),
+          ),
+
+          // Secondary routes
           GoRoute(
             path: AppRoutes.athleteAssignmentDetail,
             builder: (_, state) => AssignmentDetailScreen(
-                assignmentId: state.pathParameters['id']!),
+              assignmentId: state.pathParameters['id']!,
+            ),
           ),
           GoRoute(
             path: AppRoutes.athleteReportSubmit,
-            builder: (_, state) => SubmitReportScreen(
-                assignmentId: state.pathParameters['id']!),
+            builder: (_, state) =>
+                SubmitReportScreen(assignmentId: state.pathParameters['id']!),
           ),
           GoRoute(
             path: AppRoutes.athleteFindCoach,
@@ -178,6 +200,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.athleteMyCoach,
             builder: (_, __) => const MyCoachScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.athleteNotifications,
+            builder: (_, __) => const NotificationsScreen(),
           ),
         ],
       ),

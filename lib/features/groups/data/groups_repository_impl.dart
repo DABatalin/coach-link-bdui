@@ -20,7 +20,7 @@ class GroupsRepositoryImpl implements GroupsRepository {
     });
     final data = response.data as Map<String, dynamic>;
     return PaginatedResult(
-      items: (data['items'] as List)
+      items: ((data['items'] as List?) ?? [])
           .map((e) =>
               TrainingGroupSummary.fromJson(e as Map<String, dynamic>))
           .toList(),

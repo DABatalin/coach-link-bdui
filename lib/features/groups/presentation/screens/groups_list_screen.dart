@@ -7,7 +7,9 @@ import '../../../../core/di/repository_providers.dart';
 import '../bloc/groups_bloc.dart';
 
 class GroupsListScreen extends ConsumerWidget {
-  const GroupsListScreen({super.key});
+  const GroupsListScreen({super.key, this.isCoach = false});
+
+  final bool isCoach;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,22 +17,26 @@ class GroupsListScreen extends ConsumerWidget {
       create: (_) => GroupsBloc(
         repository: ref.read(groupsRepositoryProvider),
       )..add(const GroupsLoadRequested()),
-      child: const _GroupsView(),
+      child: _GroupsView(isCoach: isCoach),
     );
   }
 }
 
 class _GroupsView extends StatelessWidget {
-  const _GroupsView();
+  const _GroupsView({required this.isCoach});
+
+  final bool isCoach;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Группы')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showCreateDialog(context),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: isCoach
+          ? FloatingActionButton(
+              onPressed: () => _showCreateDialog(context),
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: BlocBuilder<GroupsBloc, GroupsState>(
         builder: (context, state) {
           return switch (state) {
@@ -38,7 +44,13 @@ class _GroupsView extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             GroupsLoaded(:final groups) => groups.isEmpty
-                ? const Center(child: Text('Нет групп'))
+                ? Center(
+                    child: Text(
+                      isCoach
+                          ? 'Нет групп'
+                          : 'Вы не состоите ни в одной группе',
+                    ),
+                  )
                 : ListView.builder(
                     itemCount: groups.length,
                     itemBuilder: (context, index) {
@@ -48,12 +60,13 @@ class _GroupsView extends StatelessWidget {
                           child: Icon(Icons.groups),
                         ),
                         title: Text(group.name),
-                        subtitle: Text(
-                          '${group.membersCount} спортсменов',
-                        ),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () =>
-                            context.go('/coach/groups/${group.id}'),
+                        subtitle: Text('${group.membersCount} спортсменов'),
+                        trailing: isCoach
+                            ? const Icon(Icons.chevron_right)
+                            : null,
+                        onTap: isCoach
+                            ? () => context.go('/coach/groups/${group.id}')
+                            : null,
                       );
                     },
                   ),

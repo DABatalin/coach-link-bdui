@@ -92,7 +92,25 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   ) async {
     try {
       await _repository.markRead(notificationId: event.notificationId);
-      add(const NotificationsLoadRequested());
+      final current = state;
+      if (current is NotificationsLoaded) {
+        final updated = current.notifications.map((n) {
+          if (n.id != event.notificationId) return n;
+          return AppNotification(
+            id: n.id,
+            type: n.type,
+            title: n.title,
+            body: n.body,
+            data: n.data,
+            isRead: true,
+            createdAt: n.createdAt,
+          );
+        }).toList();
+        emit(NotificationsLoaded(
+          notifications: updated,
+          unreadCount: current.unreadCount > 0 ? current.unreadCount - 1 : 0,
+        ));
+      }
     } catch (_) {}
   }
 

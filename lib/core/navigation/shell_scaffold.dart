@@ -40,8 +40,6 @@ class ShellScaffold extends StatelessWidget {
     for (int i = 0; i < tabs.length; i++) {
       if (currentLocation.startsWith(tabs[i].route)) return i;
     }
-    // Profile and notifications match for both roles
-    if (currentLocation.startsWith(AppRoutes.profile)) return tabs.length - 1;
     return 0;
   }
 }
@@ -80,7 +78,7 @@ const _coachTabs = [
     label: 'Группы',
   ),
   _TabItem(
-    route: AppRoutes.profile,
+    route: AppRoutes.coachProfile,
     icon: Icons.person_outline,
     activeIcon: Icons.person,
     label: 'Профиль',
@@ -107,7 +105,7 @@ const _athleteTabs = [
     label: 'Группы',
   ),
   _TabItem(
-    route: AppRoutes.profile,
+    route: AppRoutes.athleteProfile,
     icon: Icons.person_outline,
     activeIcon: Icons.person,
     label: 'Профиль',

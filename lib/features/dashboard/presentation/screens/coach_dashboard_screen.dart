@@ -42,7 +42,7 @@ class _CoachDashboardView extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () => context.go(AppRoutes.notifications),
+            onPressed: () => context.go(AppRoutes.coachNotifications),
           ),
         ],
       ),

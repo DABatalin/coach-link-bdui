@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "149200140648",
+    "project_id": "coach-link-d9d1a",
+    "storage_bucket": "coach-link-d9d1a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149200140648:android:f3a7cb52b009b91ec9fedd",
+        "android_client_info": {
+          "package_name": "com.coachlink.coach_link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2l7k_XF3lExcHyclWumr9GEuNP4vY1-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

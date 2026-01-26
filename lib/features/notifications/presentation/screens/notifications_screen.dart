@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/auth/auth_state.dart';
+import '../../../../core/di/auth_providers.dart';
 import '../../../../core/di/repository_providers.dart';
+import '../../domain/models/app_notification.dart';
 import '../bloc/notifications_bloc.dart';
 
 class NotificationsScreen extends ConsumerWidget {
@@ -10,17 +14,43 @@ class NotificationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(authStateProvider).valueOrNull;
+    final isCoach = auth is Authenticated && auth.isCoach;
+
     return BlocProvider(
       create: (_) => NotificationsBloc(
         repository: ref.read(notificationsRepositoryProvider),
       )..add(const NotificationsLoadRequested()),
-      child: const _NotificationsView(),
+      child: _NotificationsView(isCoach: isCoach),
     );
   }
 }
 
 class _NotificationsView extends StatelessWidget {
-  const _NotificationsView();
+  const _NotificationsView({required this.isCoach});
+
+  final bool isCoach;
+
+  String? _pathFor(AppNotification n) {
+    final data = n.data;
+    return switch (n.type) {
+      'training_assigned' => isCoach
+          ? '/coach/assignments/${data?['assignment_id']}'
+          : '/athlete/assignments/${data?['assignment_id']}',
+      'report_submitted' => data?['assignment_id'] != null
+          ? '/coach/assignments/${data!['assignment_id']}/report'
+          : null,
+      'connection_request' =>
+        isCoach ? '/coach/requests' : '/athlete/find-coach',
+      'connection_accepted' =>
+        isCoach ? '/coach/athletes' : '/athlete/my-coach',
+      'connection_rejected' =>
+        isCoach ? '/coach/athletes' : '/athlete/find-coach',
+      'group_added' || 'group_removed' =>
+        isCoach ? '/coach/groups' : '/athlete/groups',
+      _ => null,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +114,8 @@ class _NotificationsView extends StatelessWidget {
                                   .read<NotificationsBloc>()
                                   .add(NotificationMarkedRead(n.id));
                             }
+                            final path = _pathFor(n);
+                            if (path != null) context.push(path);
                           },
                         );
                       },
