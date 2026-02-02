@@ -43,6 +43,11 @@ dependencies:
 
   # UI
   cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+
+  # BDUI
+  bdui_kit:
+    path: packages/bdui_kit
 
 dev_dependencies:
   flutter_test:

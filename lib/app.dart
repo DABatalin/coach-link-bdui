@@ -37,7 +37,7 @@ class _CoachLinkAppState extends ConsumerState<CoachLinkApp> {
 
     return MaterialApp.router(
       title: 'CoachLink',
-      theme: AppTheme.light,
+      theme: AppTheme.dark,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );

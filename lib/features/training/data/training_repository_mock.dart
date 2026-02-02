@@ -108,6 +108,7 @@ class TrainingRepositoryMock implements TrainingRepository {
     DateTime? dateFrom,
     DateTime? dateTo,
     String? status,
+    String? groupId,
     String sortBy = 'date_desc',
     int page = 1,
     int pageSize = 20,

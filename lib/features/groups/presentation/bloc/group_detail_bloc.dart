@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/api/api_exceptions.dart';
+import '../../../training/domain/models/assignment.dart';
+import '../../../training/domain/training_repository.dart';
 import '../../domain/groups_repository.dart';
 import '../../domain/models/training_group.dart';
 
@@ -41,8 +43,9 @@ class GroupDetailLoading extends GroupDetailState {
 }
 
 class GroupDetailLoaded extends GroupDetailState {
-  const GroupDetailLoaded(this.group);
+  const GroupDetailLoaded(this.group, {this.assignments = const []});
   final TrainingGroupDetail group;
+  final List<AssignmentListItem> assignments;
 }
 
 class GroupDetailError extends GroupDetailState {
@@ -52,8 +55,11 @@ class GroupDetailError extends GroupDetailState {
 
 // Bloc
 class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
-  GroupDetailBloc({required GroupsRepository repository})
-      : _repository = repository,
+  GroupDetailBloc({
+    required GroupsRepository repository,
+    required TrainingRepository trainingRepository,
+  })  : _repository = repository,
+        _trainingRepository = trainingRepository,
         super(const GroupDetailInitial()) {
     on<GroupDetailLoadRequested>(_onLoad);
     on<GroupMemberAdded>(_onMemberAdded);
@@ -61,6 +67,7 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
   }
 
   final GroupsRepository _repository;
+  final TrainingRepository _trainingRepository;
 
   Future<void> _onLoad(
     GroupDetailLoadRequested event,
@@ -68,8 +75,14 @@ class GroupDetailBloc extends Bloc<GroupDetailEvent, GroupDetailState> {
   ) async {
     emit(const GroupDetailLoading());
     try {
-      final group = await _repository.getGroup(groupId: event.groupId);
-      emit(GroupDetailLoaded(group));
+      final results = await Future.wait([
+        _repository.getGroup(groupId: event.groupId),
+        _trainingRepository.getAssignments(groupId: event.groupId, pageSize: 50),
+      ]);
+      emit(GroupDetailLoaded(
+        results[0] as TrainingGroupDetail,
+        assignments: (results[1] as dynamic).items as List<AssignmentListItem>,
+      ));
     } on DioException catch (e) {
       final error = e.error;
       emit(GroupDetailError(

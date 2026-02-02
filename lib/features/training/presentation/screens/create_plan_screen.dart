@@ -10,7 +10,9 @@ import '../../../groups/domain/models/training_group.dart';
 enum _TargetMode { athletes, group }
 
 class CreatePlanScreen extends ConsumerStatefulWidget {
-  const CreatePlanScreen({super.key});
+  const CreatePlanScreen({super.key, this.preselectedGroupId});
+
+  final String? preselectedGroupId;
 
   @override
   ConsumerState<CreatePlanScreen> createState() => _CreatePlanScreenState();
@@ -22,11 +24,11 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
   final _descriptionController = TextEditingController();
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
 
-  _TargetMode _targetMode = _TargetMode.athletes;
+  late _TargetMode _targetMode;
   List<AthleteInfo> _athletes = [];
   List<TrainingGroupSummary> _groups = [];
   final Set<String> _selectedAthleteIds = {};
-  String? _selectedGroupId;
+  late String? _selectedGroupId;
 
   bool _isLoadingTargets = true;
   bool _isSubmitting = false;
@@ -34,6 +36,13 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.preselectedGroupId != null) {
+      _targetMode = _TargetMode.group;
+      _selectedGroupId = widget.preselectedGroupId;
+    } else {
+      _targetMode = _TargetMode.athletes;
+      _selectedGroupId = null;
+    }
     _loadTargets();
   }
 
