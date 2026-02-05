@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/connections/presentation/screens/athletes_list_screen.dart';
+import '../../features/connections/presentation/screens/athlete_detail_screen.dart';
 import '../../features/connections/presentation/screens/find_coach_screen.dart';
 import '../../features/connections/presentation/screens/my_coach_screen.dart';
 import '../../features/connections/presentation/screens/pending_requests_screen.dart';
@@ -110,6 +111,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => const AthletesListScreen(),
           ),
           GoRoute(
+            path: AppRoutes.coachAthleteDetail,
+            builder: (_, state) => AthleteDetailScreen(
+              athleteId: state.pathParameters['id']!,
+            ),
+          ),
+          GoRoute(
             path: AppRoutes.coachRequests,
             builder: (_, __) => const PendingRequestsScreen(),
           ),
@@ -139,7 +146,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: AppRoutes.coachPlanCreate,
-            builder: (_, __) => const CreatePlanScreen(),
+            builder: (_, state) => CreatePlanScreen(
+              preselectedGroupId: state.uri.queryParameters['group_id'],
+            ),
           ),
           GoRoute(
             path: AppRoutes.coachGroupDetail,

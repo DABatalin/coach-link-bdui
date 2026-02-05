@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/repository_providers.dart';
 import '../bloc/athletes_bloc.dart';
@@ -63,6 +64,10 @@ class _AthletesView extends StatelessWidget {
                               ),
                               title: Text(athlete.fullName),
                               subtitle: Text('@${athlete.login}'),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () => context.go(
+                                '/coach/athletes/${athlete.id}',
+                              ),
                             );
                           },
                         ),

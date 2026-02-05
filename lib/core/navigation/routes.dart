@@ -6,6 +6,7 @@ abstract final class AppRoutes {
   // Coach
   static const coachDashboard = '/coach/dashboard';
   static const coachAthletes = '/coach/athletes';
+  static const coachAthleteDetail = '/coach/athletes/:id';
   static const coachRequests = '/coach/requests';
   static const coachAssignments = '/coach/assignments';
   static const coachAssignmentDetail = '/coach/assignments/:id';
