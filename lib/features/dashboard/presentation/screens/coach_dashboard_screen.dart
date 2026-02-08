@@ -1,8 +1,11 @@
+import 'package:bdui_kit/bdui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/bdui/bdui_action_handler.dart';
+import '../../../../core/bdui/bdui_providers.dart';
 import '../../../../core/di/repository_providers.dart';
 import '../../../../core/di/auth_providers.dart';
 import '../../../../core/auth/auth_state.dart';
@@ -19,20 +22,30 @@ class CoachDashboardScreen extends ConsumerWidget {
     final fullName =
         authState is Authenticated ? authState.fullName : 'Тренер';
 
+    final actionHandler = ref.read(bduiActionHandlerProvider);
+
     return BlocProvider(
       create: (_) => DashboardBloc(
         role: 'coach',
         connectionsRepository: ref.read(connectionsRepositoryProvider),
         trainingRepository: ref.read(trainingRepositoryProvider),
+        bduiDataProvider: ref.read(bduiDataProviderProvider),
       )..add(const DashboardLoadRequested()),
-      child: _CoachDashboardView(fullName: fullName),
+      child: _CoachDashboardView(
+        fullName: fullName,
+        actionHandler: actionHandler,
+      ),
     );
   }
 }
 
 class _CoachDashboardView extends StatelessWidget {
-  const _CoachDashboardView({required this.fullName});
+  const _CoachDashboardView({
+    required this.fullName,
+    required this.actionHandler,
+  });
   final String fullName;
+  final BduiActionHandler actionHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +64,26 @@ class _CoachDashboardView extends StatelessWidget {
           return switch (state) {
             DashboardInitial() || DashboardLoading() => const Center(
                 child: CircularProgressIndicator(),
+              ),
+            DashboardBduiLoaded(:final schema) => RefreshIndicator(
+                onRefresh: () async => context
+                    .read<DashboardBloc>()
+                    .add(const DashboardLoadRequested()),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: BduiRenderer(
+                    registry: ComponentRegistry.defaults(),
+                    onAction: (action) {
+                      if (action is RefreshAction) {
+                        context
+                            .read<DashboardBloc>()
+                            .add(const DashboardLoadRequested());
+                      } else {
+                        actionHandler.handle(action);
+                      }
+                    },
+                  ).buildSchema(schema),
+                ),
               ),
             CoachDashboardLoaded(
               :final athleteCount,

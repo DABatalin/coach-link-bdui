@@ -1,7 +1,9 @@
+import 'package:bdui_kit/bdui_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/api/api_exceptions.dart';
+import '../../../../core/bdui/bdui_data_provider.dart';
 import '../../domain/models/assignment.dart';
 import '../../domain/training_repository.dart';
 
@@ -33,6 +35,15 @@ class AssignmentDetailLoaded extends AssignmentDetailState {
   final AssignmentDetail assignment;
 }
 
+class AssignmentDetailWithBdui extends AssignmentDetailState {
+  const AssignmentDetailWithBdui({
+    required this.assignment,
+    required this.descriptionSchema,
+  });
+  final AssignmentDetail assignment;
+  final BduiSchema descriptionSchema;
+}
+
 class AssignmentDetailError extends AssignmentDetailState {
   const AssignmentDetailError(this.message);
   final String message;
@@ -41,13 +52,17 @@ class AssignmentDetailError extends AssignmentDetailState {
 // Bloc
 class AssignmentDetailBloc
     extends Bloc<AssignmentDetailEvent, AssignmentDetailState> {
-  AssignmentDetailBloc({required TrainingRepository repository})
-      : _repository = repository,
+  AssignmentDetailBloc({
+    required TrainingRepository repository,
+    BduiDataProvider? bduiDataProvider,
+  })  : _repository = repository,
+        _bduiDataProvider = bduiDataProvider,
         super(const AssignmentDetailInitial()) {
     on<AssignmentDetailLoadRequested>(_onLoad);
   }
 
   final TrainingRepository _repository;
+  final BduiDataProvider? _bduiDataProvider;
 
   Future<void> _onLoad(
     AssignmentDetailLoadRequested event,
@@ -57,6 +72,24 @@ class AssignmentDetailBloc
     try {
       final assignment =
           await _repository.getAssignment(assignmentId: event.assignmentId);
+
+      // Попробовать загрузить BDUI-описание тренировки
+      if (_bduiDataProvider != null) {
+        try {
+          final schema = await _bduiDataProvider
+              .getSchema('training-detail/${event.assignmentId}');
+          if (schema != null) {
+            emit(AssignmentDetailWithBdui(
+              assignment: assignment,
+              descriptionSchema: schema,
+            ));
+            return;
+          }
+        } catch (_) {
+          // BDUI недоступен — fallback на plain-text
+        }
+      }
+
       emit(AssignmentDetailLoaded(assignment));
     } on DioException catch (e) {
       final error = e.error;

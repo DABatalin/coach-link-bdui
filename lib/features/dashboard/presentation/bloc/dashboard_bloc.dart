@@ -1,5 +1,7 @@
+import 'package:bdui_kit/bdui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/bdui/bdui_data_provider.dart';
 import '../../../connections/domain/connections_repository.dart';
 import '../../../training/domain/models/assignment.dart';
 import '../../../training/domain/training_repository.dart';
@@ -50,6 +52,11 @@ class AthleteDashboardLoaded extends DashboardState {
   final String? coachName;
 }
 
+class DashboardBduiLoaded extends DashboardState {
+  const DashboardBduiLoaded(this.schema);
+  final BduiSchema schema;
+}
+
 class DashboardError extends DashboardState {
   const DashboardError(this.message);
   final String message;
@@ -61,8 +68,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     required this.role,
     required ConnectionsRepository connectionsRepository,
     required TrainingRepository trainingRepository,
+    BduiDataProvider? bduiDataProvider,
   })  : _connectionsRepo = connectionsRepository,
         _trainingRepo = trainingRepository,
+        _bduiDataProvider = bduiDataProvider,
         super(const DashboardInitial()) {
     on<DashboardLoadRequested>(_onLoad);
   }
@@ -70,6 +79,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final String role;
   final ConnectionsRepository _connectionsRepo;
   final TrainingRepository _trainingRepo;
+  final BduiDataProvider? _bduiDataProvider;
 
   Future<void> _onLoad(
     DashboardLoadRequested event,
@@ -77,6 +87,18 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ) async {
     emit(const DashboardLoading());
     try {
+      // Попробовать BDUI
+      if (_bduiDataProvider != null) {
+        final screenId =
+            role == 'coach' ? 'coach-dashboard' : 'athlete-dashboard';
+        final schema = await _bduiDataProvider.getSchema(screenId);
+        if (schema != null) {
+          emit(DashboardBduiLoaded(schema));
+          return;
+        }
+      }
+
+      // Fallback — нативный дашборд
       if (role == 'coach') {
         await _loadCoachDashboard(emit);
       } else {
