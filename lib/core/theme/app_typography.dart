@@ -4,9 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 /// Типографика приложения на базе Rubik.
-///
-/// Все стили — геттеры (не const), поэтому виджеты не должны
-/// оборачивать Text с этими стилями в const.
 abstract final class AppTypography {
   // ── Display / Headline ────────────────────────────────────────────────────
 

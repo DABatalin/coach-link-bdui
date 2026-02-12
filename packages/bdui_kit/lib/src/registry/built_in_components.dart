@@ -453,7 +453,10 @@ TextStyle? _resolveTextStyle(BuildContext context, String? styleName) {
     'body' => theme.bodyMedium,
     'caption' => theme.bodySmall,
     'label' => theme.labelMedium,
-    'tip' => theme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+    'tip' => theme.bodyMedium?.copyWith(
+      fontStyle: FontStyle.italic,
+      color: const Color(0xFF5D4037),
+    ),
     _ => theme.bodyMedium,
   };
 }
