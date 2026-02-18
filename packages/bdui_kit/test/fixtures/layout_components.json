@@ -1,0 +1,78 @@
+{
+  "screen_id": "layout-components",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Layout Components", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "container",
+        "props": {
+          "padding": 16,
+          "color": "#E3F2FD",
+          "border_radius": 8
+        },
+        "children": [
+          {
+            "type": "text",
+            "props": {"text": "Container Content", "style": "body"}
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "row",
+        "props": {"spacing": 8},
+        "children": [
+          {
+            "type": "text",
+            "props": {"text": "Row Item 1", "style": "body"}
+          },
+          {
+            "type": "text",
+            "props": {"text": "Row Item 2", "style": "body"}
+          },
+          {
+            "type": "text",
+            "props": {"text": "Row Item 3", "style": "body"}
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Before spacer", "style": "body"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 32}
+      },
+      {
+        "type": "text",
+        "props": {"text": "After spacer (32px)", "style": "body"}
+      }
+    ]
+  }
+}

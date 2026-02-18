@@ -1,0 +1,43 @@
+{
+  "screen_id": "text-components",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Text Components", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Headline Text", "style": "headline"}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Title Text", "style": "title"}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Body Text", "style": "body"}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Caption Text", "style": "caption"}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Label Text", "style": "label"}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Tip Text", "style": "tip"}
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "screen_id": "coach-dashboard",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Добрый день, Иван!", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "row",
+        "props": {"spacing": 12},
+        "children": [
+          {
+            "type": "card",
+            "id": "athletes-count",
+            "props": {
+              "title": "Спортсмены",
+              "subtitle": "5 человек",
+              "icon": "people",
+              "color": "#1976D2"
+            },
+            "action": {"type": "navigate", "route": "/coach/athletes"}
+          },
+          {
+            "type": "card",
+            "id": "pending-requests",
+            "props": {
+              "title": "Заявки",
+              "subtitle": "Ожидают решения",
+              "icon": "person_add",
+              "color": "#FF9800",
+              "badge": 3
+            },
+            "action": {"type": "navigate", "route": "/coach/requests"}
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "list",
+        "id": "recent-reports",
+        "props": {
+          "title": "Последние отчёты",
+          "empty_text": "Отчётов пока нет",
+          "divider": true
+        },
+        "children": [
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Тренировка на выносливость",
+              "subtitle": "RPE: 7/10 · 45 мин",
+              "leading_icon": "description",
+              "trailing_text": "2 ч. назад"
+            },
+            "action": {"type": "navigate", "route": "/coach/assignments/123/report"}
+          }
+        ]
+      }
+    ]
+  }
+}

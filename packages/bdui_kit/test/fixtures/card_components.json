@@ -1,0 +1,61 @@
+{
+  "screen_id": "card-components",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Card Components", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "row",
+        "props": {"spacing": 12},
+        "children": [
+          {
+            "type": "card",
+            "id": "card-1",
+            "props": {
+              "title": "Card 1",
+              "subtitle": "Subtitle",
+              "icon": "star",
+              "color": "#FF9800"
+            }
+          },
+          {
+            "type": "card",
+            "id": "card-2",
+            "props": {
+              "title": "Card 2",
+              "subtitle": "With Badge",
+              "icon": "notifications",
+              "color": "#F44336",
+              "badge": 5
+            }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "card",
+        "id": "card-3",
+        "props": {
+          "title": "Card 3",
+          "subtitle": "With Action",
+          "icon": "info",
+          "color": "#2196F3"
+        },
+        "action": {"type": "navigate", "route": "/test"}
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "screen_id": "list-components",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "List Components", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "list",
+        "id": "list-1",
+        "props": {
+          "title": "List Title",
+          "empty_text": "No items",
+          "divider": true
+        },
+        "children": [
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Item 1",
+              "subtitle": "Subtitle 1",
+              "leading_icon": "home",
+              "trailing_text": "Today"
+            }
+          },
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Item 2",
+              "subtitle": "Subtitle 2",
+              "leading_icon": "work",
+              "trailing_text": "Yesterday"
+            }
+          },
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Item 3",
+              "subtitle": "Subtitle 3",
+              "leading_icon": "favorite",
+              "trailing_text": "2 days ago"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

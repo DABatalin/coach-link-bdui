@@ -1,0 +1,75 @@
+{
+  "screen_id": "empty-states",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Empty States", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Empty List", "style": "title"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 8}
+      },
+      {
+        "type": "list",
+        "id": "empty-list",
+        "props": {
+          "title": "Список",
+          "empty_text": "Нет элементов",
+          "divider": true
+        },
+        "children": []
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Empty Row", "style": "title"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 8}
+      },
+      {
+        "type": "row",
+        "props": {"spacing": 12},
+        "children": []
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Empty Container", "style": "title"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 8}
+      },
+      {
+        "type": "container",
+        "props": {
+          "padding": 16,
+          "color": "#F5F5F5",
+          "border_radius": 8
+        },
+        "children": []
+      }
+    ]
+  }
+}

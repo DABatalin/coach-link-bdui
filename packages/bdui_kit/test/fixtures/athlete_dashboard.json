@@ -1,0 +1,65 @@
+{
+  "screen_id": "athlete-dashboard",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Добро пожаловать, Мария!", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "card",
+        "id": "next-training",
+        "props": {
+          "title": "Следующая тренировка",
+          "subtitle": "Сегодня, 18:00",
+          "icon": "directions_run",
+          "color": "#4CAF50"
+        },
+        "action": {"type": "navigate", "route": "/athlete/training/456"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "list",
+        "id": "recent-trainings",
+        "props": {
+          "title": "Последние тренировки",
+          "empty_text": "Тренировок пока нет",
+          "divider": true
+        },
+        "children": [
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Силовая тренировка",
+              "subtitle": "Вчера, 17:30",
+              "leading_icon": "fitness_center",
+              "trailing_text": "60 мин"
+            },
+            "action": {"type": "navigate", "route": "/athlete/training/789"}
+          },
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Кардио",
+              "subtitle": "2 дня назад",
+              "leading_icon": "directions_run",
+              "trailing_text": "45 мин"
+            },
+            "action": {"type": "navigate", "route": "/athlete/training/790"}
+          }
+        ]
+      }
+    ]
+  }
+}

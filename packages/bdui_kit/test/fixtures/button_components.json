@@ -1,0 +1,64 @@
+{
+  "screen_id": "button-components",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Button Components", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "button",
+        "props": {
+          "text": "Filled Button",
+          "style": "filled"
+        },
+        "action": {"type": "navigate", "route": "/test"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 8}
+      },
+      {
+        "type": "button",
+        "props": {
+          "text": "Outlined Button",
+          "style": "outlined"
+        },
+        "action": {"type": "navigate", "route": "/test"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 8}
+      },
+      {
+        "type": "button",
+        "props": {
+          "text": "Text Button",
+          "style": "text"
+        },
+        "action": {"type": "navigate", "route": "/test"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 8}
+      },
+      {
+        "type": "button",
+        "props": {
+          "text": "Full Width Button",
+          "style": "filled",
+          "full_width": true
+        },
+        "action": {"type": "navigate", "route": "/test"}
+      }
+    ]
+  }
+}

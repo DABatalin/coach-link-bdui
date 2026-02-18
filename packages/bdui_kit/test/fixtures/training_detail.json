@@ -1,0 +1,89 @@
+{
+  "screen_id": "training-detail",
+  "version": "1.0.0",
+  "ttl_seconds": 300,
+  "root": {
+    "type": "scroll_view",
+    "props": {"padding": 16},
+    "children": [
+      {
+        "type": "text",
+        "props": {"text": "Тренировка на выносливость", "style": "headline"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "card",
+        "id": "training-info",
+        "props": {
+          "title": "Информация",
+          "subtitle": "Сегодня, 18:00 · 60 минут",
+          "icon": "info",
+          "color": "#2196F3"
+        }
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "text",
+        "props": {"text": "Упражнения", "style": "title"}
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 16}
+      },
+      {
+        "type": "list",
+        "id": "exercises",
+        "props": {
+          "title": "",
+          "empty_text": "Нет упражнений",
+          "divider": true
+        },
+        "children": [
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Разминка",
+              "subtitle": "10 минут · Лёгкий темп",
+              "leading_icon": "directions_run"
+            }
+          },
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Интервальная тренировка",
+              "subtitle": "30 минут · 4x5 минут",
+              "leading_icon": "fitness_center"
+            }
+          },
+          {
+            "type": "list_tile",
+            "props": {
+              "title": "Заминка",
+              "subtitle": "10 минут · Ходьба",
+              "leading_icon": "directions_run"
+            }
+          }
+        ]
+      },
+      {
+        "type": "spacer",
+        "props": {"height": 24}
+      },
+      {
+        "type": "button",
+        "props": {
+          "text": "Начать тренировку",
+          "style": "filled",
+          "full_width": true
+        },
+        "action": {"type": "navigate", "route": "/athlete/training/456/start"}
+      }
+    ]
+  }
+}
