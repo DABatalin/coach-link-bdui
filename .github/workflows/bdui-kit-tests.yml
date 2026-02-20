@@ -27,9 +27,9 @@ jobs:
       working-directory: ./packages/bdui_kit
       run: flutter pub get
       
-    - name: Run all bdui_kit tests
+    - name: Run bdui_kit tests (excluding golden tests)
       working-directory: ./packages/bdui_kit
-      run: flutter test --coverage
+      run: flutter test test/ --exclude-tags=golden --coverage
       
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

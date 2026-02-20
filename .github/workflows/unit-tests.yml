@@ -29,11 +29,6 @@ jobs:
     - name: Run unit tests
       run: flutter test test/unit/ --coverage
       
-    - name: Generate coverage report
-      run: |
-        flutter pub global activate coverage
-        flutter pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
-      
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
