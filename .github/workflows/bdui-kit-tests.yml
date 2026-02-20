@@ -3,12 +3,8 @@ name: BDUI Kit Tests
 on:
   push:
     branches: [ main, master, develop ]
-    paths:
-      - 'mobile/coach_link/packages/bdui_kit/**'
   pull_request:
     branches: [ main, master, develop ]
-    paths:
-      - 'mobile/coach_link/packages/bdui_kit/**'
 
 jobs:
   bdui-tests:

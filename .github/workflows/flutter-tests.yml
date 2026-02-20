@@ -3,12 +3,8 @@ name: Flutter Tests
 on:
   push:
     branches: [ main, master, develop ]
-    paths:
-      - 'mobile/coach_link/**'
   pull_request:
     branches: [ main, master, develop ]
-    paths:
-      - 'mobile/coach_link/**'
 
 jobs:
   test:
