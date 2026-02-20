@@ -1,0 +1,42 @@
+name: BDUI Kit Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - 'mobile/coach_link/packages/bdui_kit/**'
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - 'mobile/coach_link/packages/bdui_kit/**'
+
+jobs:
+  bdui-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies for bdui_kit
+      working-directory: ./packages/bdui_kit
+      run: flutter pub get
+      
+    - name: Run all bdui_kit tests
+      working-directory: ./packages/bdui_kit
+      run: flutter test --coverage
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: packages/bdui_kit/coverage/lcov.info
+        flags: bdui-kit
+        name: bdui-kit-coverage
+        fail_ci_if_error: false

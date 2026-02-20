@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - 'mobile/coach_link/**'
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - 'mobile/coach_link/**'
+
+jobs:
+  flutter-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Verify formatting
+      run: dart format --output=none --set-exit-if-changed .
+      
+    - name: Analyze code
+      run: flutter analyze
+      
+    - name: Run all tests
+      run: flutter test --coverage
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: coverage/lcov.info
+        flags: all-tests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  bdui-kit-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies for bdui_kit
+      working-directory: ./packages/bdui_kit
+      run: flutter pub get
+      
+    - name: Run bdui_kit tests
+      working-directory: ./packages/bdui_kit
+      run: flutter test --coverage
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: packages/bdui_kit/coverage/lcov.info
+        flags: bdui-kit
+        name: bdui-kit-coverage
+        fail_ci_if_error: false
+
+  golden-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies for bdui_kit
+      working-directory: ./packages/bdui_kit
+      run: flutter pub get
+      
+    - name: Run golden tests
+      working-directory: ./packages/bdui_kit
+      run: flutter test test/golden_test.dart
+      
+    - name: Upload golden test results
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: golden-test-results
+        path: packages/bdui_kit/test/goldens/
+        retention-days: 7
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Build APK
+      run: flutter build apk --debug
+      
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: build/app/outputs/flutter-apk/app-debug.apk
+        retention-days: 7
