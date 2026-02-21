@@ -21,13 +21,14 @@ class AthleteDetailScreen extends ConsumerWidget {
         connectionsRepository: ref.read(connectionsRepositoryProvider),
         trainingRepository: ref.read(trainingRepositoryProvider),
       )..add(AthleteDetailLoadRequested(athleteId)),
-      child: const _AthleteDetailView(),
+      child: _AthleteDetailView(athleteId: athleteId),
     );
   }
 }
 
 class _AthleteDetailView extends StatelessWidget {
-  const _AthleteDetailView();
+  const _AthleteDetailView({required this.athleteId});
+  final String athleteId;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,19 @@ class _AthleteDetailView extends StatelessWidget {
                   : 'Спортсмен',
             ),
             actions: [
-              if (state is AthleteDetailLoaded)
+              if (state is AthleteDetailLoaded) ...[
+                IconButton(
+                  icon: const Icon(Icons.bar_chart),
+                  onPressed: () =>
+                      context.go('/coach/athletes/$athleteId/stats'),
+                  tooltip: 'Статистика',
+                ),
+                IconButton(
+                  icon: const Icon(Icons.psychology),
+                  onPressed: () =>
+                      context.go('/coach/athletes/$athleteId/ai'),
+                  tooltip: 'ИИ-анализ',
+                ),
                 IconButton(
                   icon: const Icon(Icons.refresh),
                   onPressed: () => context
@@ -49,6 +62,7 @@ class _AthleteDetailView extends StatelessWidget {
                       .add(const AthleteDetailRefreshRequested()),
                   tooltip: 'Обновить',
                 ),
+              ],
             ],
           ),
           body: switch (state) {

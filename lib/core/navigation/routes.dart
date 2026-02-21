@@ -19,6 +19,9 @@ abstract final class AppRoutes {
   static const coachGroupDetail = '/coach/groups/:id';
   static const coachProfile = '/coach/profile';
   static const coachNotifications = '/coach/notifications';
+  static const coachAthleteStats = '/coach/athletes/:id/stats';
+  static const coachAthleteAi = '/coach/athletes/:id/ai';
+  static const coachAiSummary = '/coach/ai-summary';
 
   // Athlete
   static const athleteDashboard = '/athlete/dashboard';
@@ -30,6 +33,7 @@ abstract final class AppRoutes {
   static const athleteGroups = '/athlete/groups';
   static const athleteProfile = '/athlete/profile';
   static const athleteNotifications = '/athlete/notifications';
+  static const athleteMyStats = '/athlete/my-stats';
 
   // Legacy aliases (redirect targets based on role, use in code where role is known)
   static const profile = '/coach/profile';

@@ -1,5 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../features/ai/data/ai_repository_impl.dart';
+import '../../features/ai/data/ai_repository_mock.dart';
+import '../../features/ai/domain/ai_repository.dart';
+import '../../features/analytics/data/analytics_repository_impl.dart';
+import '../../features/analytics/data/analytics_repository_mock.dart';
+import '../../features/analytics/domain/analytics_repository.dart';
 import '../../features/auth/data/auth_repository_impl.dart';
 import '../../features/auth/data/auth_repository_mock.dart';
 import '../../features/auth/domain/auth_repository.dart';
@@ -69,4 +75,14 @@ final notificationsRepositoryProvider =
     Provider<NotificationsRepository>((ref) {
   if (useMocks) return NotificationsRepositoryMock();
   return NotificationsRepositoryImpl(ref.watch(dioProvider));
+});
+
+final analyticsRepositoryProvider = Provider<AnalyticsRepository>((ref) {
+  if (useMocks) return AnalyticsRepositoryMock();
+  return AnalyticsRepositoryImpl(ref.watch(dioProvider));
+});
+
+final aiRepositoryProvider = Provider<AiRepository>((ref) {
+  if (useMocks) return AiRepositoryMock();
+  return AiRepositoryImpl(ref.watch(dioProvider));
 });

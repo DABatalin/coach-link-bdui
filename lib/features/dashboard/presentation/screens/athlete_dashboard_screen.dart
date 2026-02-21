@@ -54,6 +54,11 @@ class _AthleteDashboardView extends StatelessWidget {
         title: const Text('CoachLink'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () => context.go(AppRoutes.athleteMyStats),
+            tooltip: 'Статистика',
+          ),
+          IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () => context.go(AppRoutes.athleteNotifications),
           ),

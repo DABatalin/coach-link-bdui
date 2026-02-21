@@ -23,6 +23,10 @@ import '../../features/training/presentation/screens/athlete_assignments_screen.
 import '../../features/training/presentation/screens/coach_assignments_screen.dart';
 import '../../features/training/presentation/screens/create_plan_screen.dart';
 import '../../features/training/presentation/screens/templates_screen.dart';
+import '../../features/analytics/presentation/screens/athlete_stats_screen.dart';
+import '../../features/analytics/presentation/screens/my_stats_screen.dart';
+import '../../features/ai/presentation/screens/ai_athlete_screen.dart';
+import '../../features/ai/presentation/screens/ai_summary_screen.dart';
 import '../auth/auth_state.dart';
 import '../di/auth_providers.dart';
 import 'routes.dart';
@@ -159,6 +163,22 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: AppRoutes.coachNotifications,
             builder: (_, __) => const NotificationsScreen(),
           ),
+          GoRoute(
+            path: AppRoutes.coachAthleteStats,
+            builder: (_, state) => AthleteStatsScreen(
+              athleteId: state.pathParameters['id']!,
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.coachAthleteAi,
+            builder: (_, state) => AiAthleteScreen(
+              athleteId: state.pathParameters['id']!,
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.coachAiSummary,
+            builder: (_, __) => const AiSummaryScreen(),
+          ),
         ],
       ),
 
@@ -213,6 +233,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: AppRoutes.athleteNotifications,
             builder: (_, __) => const NotificationsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.athleteMyStats,
+            builder: (_, __) => const MyStatsScreen(),
           ),
         ],
       ),
