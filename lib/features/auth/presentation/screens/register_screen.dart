@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/analytics_providers.dart';
 import '../../../../core/di/auth_providers.dart';
 import '../../../../core/di/repository_providers.dart';
 import '../bloc/register_bloc.dart';
@@ -19,6 +20,7 @@ class RegisterScreen extends ConsumerWidget {
       create: (_) => RegisterBloc(
         repository: ref.read(authRepositoryProvider),
         authManager: ref.read(authManagerProvider),
+        analytics: ref.read(analyticsServiceProvider),
       ),
       child: const _RegisterView(),
     );

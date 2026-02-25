@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/di/analytics_providers.dart';
 import '../../../../core/di/repository_providers.dart';
 import '../bloc/find_coach_bloc.dart';
 
@@ -13,6 +14,7 @@ class FindCoachScreen extends ConsumerWidget {
     return BlocProvider(
       create: (_) => FindCoachBloc(
         repository: ref.read(connectionsRepositoryProvider),
+        analytics: ref.read(analyticsServiceProvider),
       ),
       child: const _FindCoachView(),
     );

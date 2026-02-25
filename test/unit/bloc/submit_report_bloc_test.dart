@@ -10,12 +10,17 @@ import '../../helpers/test_data.dart';
 
 void main() {
   late MockReportsRepository reportsRepo;
+  late MockAnalyticsService analytics;
 
   setUp(() {
     reportsRepo = MockReportsRepository();
+    analytics = MockAnalyticsService();
   });
 
-  SubmitReportBloc buildBloc() => SubmitReportBloc(repository: reportsRepo);
+  SubmitReportBloc buildBloc() => SubmitReportBloc(
+        repository: reportsRepo,
+        analytics: analytics,
+      );
 
   const validEvent = ReportSubmitted(
     assignmentId: 'a1',

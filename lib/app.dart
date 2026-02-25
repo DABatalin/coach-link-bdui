@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/auth/auth_state.dart';
+import 'core/di/analytics_providers.dart';
 import 'core/di/auth_providers.dart';
 import 'core/di/repository_providers.dart';
 import 'core/navigation/app_router.dart';
@@ -27,11 +28,16 @@ class _CoachLinkAppState extends ConsumerState<CoachLinkApp> {
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
 
-    // Watch auth state — when user logs in, initialize FCM and register token
+    // Watch auth state — set up FCM, bind analytics user ID
     ref.listen<AsyncValue<AuthState>>(authStateProvider, (_, next) {
       final auth = next.valueOrNull;
+      final analytics = ref.read(analyticsServiceProvider);
       if (auth is Authenticated) {
         _setupFcm(router);
+        analytics.setUser(auth.userId);
+      }
+      if (auth is Unauthenticated) {
+        analytics.clearUser();
       }
     });
 

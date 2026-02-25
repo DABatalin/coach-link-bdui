@@ -28,21 +28,22 @@ import '../../features/analytics/presentation/screens/my_stats_screen.dart';
 import '../../features/ai/presentation/screens/ai_athlete_screen.dart';
 import '../../features/ai/presentation/screens/ai_summary_screen.dart';
 import '../auth/auth_state.dart';
+import '../di/analytics_providers.dart';
 import '../di/auth_providers.dart';
 import 'routes.dart';
 import 'shell_scaffold.dart';
 
-/// Wraps a widget in a [NoTransitionPage] to eliminate push animation
-/// when switching between bottom nav tabs.
 Page<void> _noTransition(Widget child) =>
     NoTransitionPage<void>(child: child);
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
+  final analytics = ref.watch(analyticsServiceProvider);
 
   return GoRouter(
     initialLocation: AppRoutes.login,
     debugLogDiagnostics: false,
+    observers: [analytics.observer],
     redirect: (context, state) {
       final auth = authState.valueOrNull;
       final loc = state.matchedLocation;

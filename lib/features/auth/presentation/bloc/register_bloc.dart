@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/auth/auth_manager.dart';
 import '../../domain/auth_repository.dart';
@@ -11,14 +12,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc({
     required AuthRepository repository,
     required AuthManager authManager,
+    required AnalyticsService analytics,
   })  : _repository = repository,
         _authManager = authManager,
+        _analytics = analytics,
         super(const RegisterInitial()) {
     on<RegisterSubmitted>(_onSubmitted);
   }
 
   final AuthRepository _repository;
   final AuthManager _authManager;
+  final AnalyticsService _analytics;
 
   Future<void> _onSubmitted(
     RegisterSubmitted event,
@@ -38,6 +42,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         refreshToken: tokens.refreshToken,
         user: tokens.user.toJson(),
       );
+      await _analytics.logSignUp(role: event.role);
       emit(const RegisterSuccess());
     } on DioException catch (e) {
       final error = e.error;
@@ -57,7 +62,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       } else {
         emit(const RegisterFailure(message: 'Ошибка подключения к серверу'));
       }
-    } catch (_) {
+    } catch (e, stack) {
+      await _analytics.recordError(e, stack);
       emit(const RegisterFailure(message: 'Произошла неизвестная ошибка'));
     }
   }

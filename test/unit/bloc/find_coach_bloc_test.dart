@@ -8,12 +8,17 @@ import '../../helpers/test_data.dart';
 
 void main() {
   late MockConnectionsRepository connectionsRepo;
+  late MockAnalyticsService analytics;
 
   setUp(() {
     connectionsRepo = MockConnectionsRepository();
+    analytics = MockAnalyticsService();
   });
 
-  FindCoachBloc buildBloc() => FindCoachBloc(repository: connectionsRepo);
+  FindCoachBloc buildBloc() => FindCoachBloc(
+        repository: connectionsRepo,
+        analytics: analytics,
+      );
 
   group('FindCoachBloc', () {
     test('initial state has empty query and results', () {

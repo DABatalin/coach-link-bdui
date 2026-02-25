@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/api/api_exceptions.dart';
 import '../../../auth/domain/models/user.dart';
 import '../../domain/connections_repository.dart';
@@ -63,14 +64,18 @@ class FindCoachState {
 
 // Bloc
 class FindCoachBloc extends Bloc<FindCoachEvent, FindCoachState> {
-  FindCoachBloc({required ConnectionsRepository repository})
-      : _repository = repository,
+  FindCoachBloc({
+    required ConnectionsRepository repository,
+    required AnalyticsService analytics,
+  })  : _repository = repository,
+        _analytics = analytics,
         super(const FindCoachState()) {
     on<FindCoachQueryChanged>(_onQueryChanged);
     on<FindCoachRequestSent>(_onRequestSent);
   }
 
   final ConnectionsRepository _repository;
+  final AnalyticsService _analytics;
 
   Future<void> _onQueryChanged(
     FindCoachQueryChanged event,
@@ -101,6 +106,7 @@ class FindCoachBloc extends Bloc<FindCoachEvent, FindCoachState> {
     emit(state.copyWith(isSending: true));
     try {
       await _repository.sendConnectionRequest(coachId: event.coachId);
+      await _analytics.logEvent('connection_request_sent');
       emit(state.copyWith(
         isSending: false,
         sentCoachId: event.coachId,
@@ -113,7 +119,8 @@ class FindCoachBloc extends Bloc<FindCoachEvent, FindCoachState> {
         errorMessage:
             error is AppException ? error.message : 'Не удалось отправить заявку',
       ));
-    } catch (_) {
+    } catch (e, stack) {
+      await _analytics.recordError(e, stack);
       emit(state.copyWith(
         isSending: false,
         errorMessage: 'Произошла ошибка',

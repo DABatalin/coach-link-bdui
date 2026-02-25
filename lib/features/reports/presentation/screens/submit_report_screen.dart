@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/di/analytics_providers.dart';
 import '../../../../core/di/repository_providers.dart';
 import '../../../../core/navigation/routes.dart';
 import '../bloc/submit_report_bloc.dart';
@@ -16,6 +17,7 @@ class SubmitReportScreen extends ConsumerWidget {
     return BlocProvider(
       create: (_) => SubmitReportBloc(
         repository: ref.read(reportsRepositoryProvider),
+        analytics: ref.read(analyticsServiceProvider),
       ),
       child: _SubmitReportView(assignmentId: assignmentId),
     );

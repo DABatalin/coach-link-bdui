@@ -13,6 +13,7 @@ import '../../helpers/test_data.dart';
 void main() {
   late MockAuthRepository authRepo;
   late MockAuthManager authManager;
+  late MockAnalyticsService analytics;
 
   const validEvent = RegisterSubmitted(
     login: 'newuser',
@@ -25,11 +26,13 @@ void main() {
   setUp(() {
     authRepo = MockAuthRepository();
     authManager = MockAuthManager();
+    analytics = MockAnalyticsService();
   });
 
   RegisterBloc buildBloc() => RegisterBloc(
         repository: authRepo,
         authManager: authManager,
+        analytics: analytics,
       );
 
   group('RegisterBloc', () {

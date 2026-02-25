@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/analytics/analytics_service.dart';
 import '../../../../core/api/api_exceptions.dart';
 import '../../../../core/auth/auth_manager.dart';
 import '../../domain/auth_repository.dart';
@@ -11,14 +12,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
     required AuthRepository repository,
     required AuthManager authManager,
+    required AnalyticsService analytics,
   })  : _repository = repository,
         _authManager = authManager,
+        _analytics = analytics,
         super(const LoginInitial()) {
     on<LoginSubmitted>(_onSubmitted);
   }
 
   final AuthRepository _repository;
   final AuthManager _authManager;
+  final AnalyticsService _analytics;
 
   Future<void> _onSubmitted(
     LoginSubmitted event,
@@ -35,6 +39,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         refreshToken: tokens.refreshToken,
         user: tokens.user.toJson(),
       );
+      await _analytics.logLogin();
       emit(const LoginSuccess());
     } on DioException catch (e) {
       final error = e.error;
@@ -43,7 +48,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         emit(const LoginFailure('Ошибка подключения к серверу'));
       }
-    } catch (_) {
+    } catch (e, stack) {
+      await _analytics.recordError(e, stack);
       emit(const LoginFailure('Произошла неизвестная ошибка'));
     }
   }

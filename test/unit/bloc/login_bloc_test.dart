@@ -13,15 +13,18 @@ import '../../helpers/test_data.dart';
 void main() {
   late MockAuthRepository authRepo;
   late MockAuthManager authManager;
+  late MockAnalyticsService analytics;
 
   setUp(() {
     authRepo = MockAuthRepository();
     authManager = MockAuthManager();
+    analytics = MockAnalyticsService();
   });
 
   LoginBloc buildBloc() => LoginBloc(
         repository: authRepo,
         authManager: authManager,
+        analytics: analytics,
       );
 
   group('LoginBloc', () {

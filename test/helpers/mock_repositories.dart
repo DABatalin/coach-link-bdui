@@ -1,3 +1,4 @@
+import 'package:coach_link/core/analytics/analytics_service.dart';
 import 'package:coach_link/core/auth/auth_manager.dart';
 import 'package:coach_link/core/bdui/bdui_action_handler.dart';
 import 'package:coach_link/core/bdui/bdui_data_provider.dart';
@@ -29,3 +30,5 @@ class MockAuthManager extends Mock implements AuthManager {}
 class MockBduiDataProvider extends Mock implements BduiDataProvider {}
 
 class MockBduiActionHandler extends Mock implements BduiActionHandler {}
+
+class MockAnalyticsService extends Mock implements AnalyticsService {}
