@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/repository_providers.dart';
 import '../../../../core/navigation/routes.dart';
@@ -28,17 +29,17 @@ class _CoachAssignmentsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Задания'),
+        title: Text('training.assignments'.tr()),
         actions: [
           IconButton(
             icon: const Icon(Icons.archive_outlined),
             onPressed: () => context.go(AppRoutes.coachArchived),
-            tooltip: 'Архив',
+            tooltip: 'training.archived'.tr(),
           ),
           IconButton(
             icon: const Icon(Icons.bookmark_outline),
             onPressed: () => context.go(AppRoutes.coachTemplates),
-            tooltip: 'Шаблоны',
+            tooltip: 'training.templates'.tr(),
           ),
         ],
       ),
@@ -53,7 +54,7 @@ class _CoachAssignmentsView extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             AssignmentsLoaded(:final assignments) => assignments.isEmpty
-                ? const Center(child: Text('Нет заданий'))
+                ? Center(child: Text('training.noAssignments'.tr()))
                 : ListView.builder(
                     itemCount: assignments.length,
                     itemBuilder: (context, index) {
@@ -91,7 +92,7 @@ class _CoachAssignmentsView extends StatelessWidget {
                       onPressed: () => context
                           .read<AssignmentsBloc>()
                           .add(const AssignmentsLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

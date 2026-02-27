@@ -1,4 +1,5 @@
 import 'package:coach_link/firebase_options.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,6 +17,8 @@ import 'core/notifications/fcm_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await EasyLocalization.ensureInitialized();
+  
   await Hive.initFlutter();
   await Hive.openBox<String>('bdui_schemas');
 
@@ -24,7 +27,20 @@ Future<void> main() async {
   final analyticsService = AnalyticsService();
   Bloc.observer = AnalyticsBlocObserver(analyticsService);
 
-  runApp(const ProviderScope(child: CoachLinkApp()));
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('ru'), // Русский
+        Locale('en'), // Английский
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('ru'),
+      startLocale: const Locale('ru'),
+      saveLocale: true,
+      useOnlyLangCode: true,
+      child: const ProviderScope(child: CoachLinkApp()),
+    ),
+  );
 }
 
 Future<void> _initFirebase() async {

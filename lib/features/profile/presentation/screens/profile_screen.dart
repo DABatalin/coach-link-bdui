@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/auth_providers.dart';
 import '../../../../core/di/repository_providers.dart';
+import '../../../../core/l10n/language_service.dart';
+import '../../../../core/l10n/language_selector.dart';
 import '../bloc/profile_bloc.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -27,7 +30,7 @@ class _ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Профиль')),
+      appBar: AppBar(title: Text('profile.title'.tr())),
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           return switch (state) {
@@ -60,7 +63,7 @@ class _ProfileView extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    user.isCoach ? 'Тренер' : 'Спортсмен',
+                    user.isCoach ? 'profile.coach'.tr() : 'profile.athlete'.tr(),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
@@ -70,29 +73,47 @@ class _ProfileView extends StatelessWidget {
                   const SizedBox(height: 32),
                   _InfoTile(
                     icon: Icons.person_outline,
-                    label: 'Логин',
+                    label: 'profile.loginLabel'.tr(),
                     value: user.login,
                   ),
                   _InfoTile(
                     icon: Icons.email_outlined,
-                    label: 'Email',
+                    label: 'profile.emailLabel'.tr(),
                     value: user.email,
                   ),
                   _InfoTile(
                     icon: Icons.calendar_today_outlined,
-                    label: 'Дата регистрации',
+                    label: 'profile.registrationDate'.tr(),
                     value:
                         '${user.createdAt.day.toString().padLeft(2, '0')}.${user.createdAt.month.toString().padLeft(2, '0')}.${user.createdAt.year}',
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    leading: const Icon(Icons.language),
+                    title: Text('profile.language'.tr()),
+                    trailing: Consumer(
+                      builder: (context, ref, _) {
+                        final languageService = ref.read(languageServiceProvider);
+                        final currentLanguage = languageService.getCurrentLanguage(context);
+                        return Text(currentLanguage.name);
+                      },
+                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const LanguageSelectorDialog(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   OutlinedButton.icon(
                     onPressed: () => context
                         .read<ProfileBloc>()
                         .add(const ProfileLogoutRequested()),
                     icon: const Icon(Icons.logout, color: Colors.red),
-                    label: const Text(
-                      'Выйти из аккаунта',
-                      style: TextStyle(color: Colors.red),
+                    label: Text(
+                      'profile.logoutButton'.tr(),
+                      style: const TextStyle(color: Colors.red),
                     ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.red),
@@ -110,7 +131,7 @@ class _ProfileView extends StatelessWidget {
                       onPressed: () => context
                           .read<ProfileBloc>()
                           .add(const ProfileLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

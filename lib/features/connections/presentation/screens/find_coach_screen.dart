@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/analytics_providers.dart';
 import '../../../../core/di/repository_providers.dart';
@@ -27,15 +28,15 @@ class _FindCoachView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Поиск тренера')),
+      appBar: AppBar(title: Text('connections.findCoach'.tr())),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
-              decoration: const InputDecoration(
-                hintText: 'Введите ФИО или логин тренера',
-                prefixIcon: Icon(Icons.search),
+              decoration: InputDecoration(
+                hintText: 'connections.searchHint'.tr(),
+                prefixIcon: const Icon(Icons.search),
               ),
               onChanged: (value) => context
                   .read<FindCoachBloc>()
@@ -67,12 +68,12 @@ class _FindCoachView extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state.query.length < 2) {
-                  return const Center(
-                    child: Text('Введите минимум 2 символа для поиска'),
+                  return Center(
+                    child: Text('connections.minCharsSearch'.tr()),
                   );
                 }
                 if (state.results.isEmpty) {
-                  return const Center(child: Text('Ничего не найдено'));
+                  return Center(child: Text('connections.nothingFound'.tr()));
                 }
                 return ListView.builder(
                   itemCount: state.results.length,

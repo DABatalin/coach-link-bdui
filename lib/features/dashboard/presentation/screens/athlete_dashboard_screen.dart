@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/bdui/bdui_action_handler.dart';
 import '../../../../core/bdui/bdui_providers.dart';
@@ -20,7 +21,7 @@ class AthleteDashboardScreen extends ConsumerWidget {
     final authManager = ref.read(authManagerProvider);
     final authState = authManager.currentState;
     final fullName =
-        authState is Authenticated ? authState.fullName : 'Спортсмен';
+        authState is Authenticated ? authState.fullName : 'profile.athlete'.tr();
 
     final actionHandler = ref.read(bduiActionHandlerProvider);
 
@@ -51,12 +52,12 @@ class _AthleteDashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CoachLink'),
+        title: Text('app.name'.tr()),
         actions: [
           IconButton(
             icon: const Icon(Icons.bar_chart),
             onPressed: () => context.go(AppRoutes.athleteMyStats),
-            tooltip: 'Статистика',
+            tooltip: 'analytics.title'.tr(),
           ),
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -140,14 +141,14 @@ class _AthleteDashboardView extends StatelessWidget {
                         TextButton(
                           onPressed: () =>
                               context.go(AppRoutes.athleteAssignments),
-                          child: const Text('Все'),
+                          child: Text('dashboard.all'.tr()),
                         ),
                       ],
                     ),
                     if (upcomingAssignments.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 24),
-                        child: Center(child: Text('Нет заданий')),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: Center(child: Text('dashboard.noAssignments'.tr())),
                       )
                     else
                       ...upcomingAssignments.map((a) => ListTile(
@@ -184,7 +185,7 @@ class _AthleteDashboardView extends StatelessWidget {
                       onPressed: () => context
                           .read<DashboardBloc>()
                           .add(const DashboardLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

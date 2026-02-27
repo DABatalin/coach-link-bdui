@@ -1,4 +1,5 @@
 import 'package:coach_link/core/theme/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,15 +62,15 @@ class _GroupDetailViewState extends State<_GroupDetailView>
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              state is GroupDetailLoaded ? state.group.name : 'Группа',
+              state is GroupDetailLoaded ? state.group.name : 'groups.title'.tr(),
             ),
             bottom: TabBar(
               unselectedLabelColor: AppColors.textHint,
               labelColor: AppColors.accent,
               controller: _tabController,
-              tabs: const [
-                Tab(icon: Icon(Icons.people), text: 'Участники', ),
-                Tab(icon: Icon(Icons.assignment), text: 'Задания'),
+              tabs: [
+                Tab(icon: const Icon(Icons.people), text: 'groups.members'.tr()),
+                Tab(icon: const Icon(Icons.assignment), text: 'training.assignments'.tr()),
               ],
             ),
           ),
@@ -79,7 +80,7 @@ class _GroupDetailViewState extends State<_GroupDetailView>
                     '${AppRoutes.coachPlanCreate}?group_id=${widget.groupId}',
                   ),
                   icon: const Icon(Icons.add),
-                  label: const Text('Выдать задание'),
+                  label: Text('groups.assignTraining'.tr()),
                 )
               : FloatingActionButton(
                   onPressed: () => _showAddMemberSheet(context, state),
@@ -116,7 +117,7 @@ class _GroupDetailViewState extends State<_GroupDetailView>
                       onPressed: () => context
                           .read<GroupDetailBloc>()
                           .add(GroupDetailLoadRequested(widget.groupId)),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),
@@ -159,7 +160,7 @@ class _MembersTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (group.members.isEmpty) {
-      return const Center(child: Text('В группе нет спортсменов'));
+      return Center(child: Text('groups.noMembers'.tr()));
     }
     return ListView.builder(
       itemCount: group.members.length,
@@ -196,7 +197,7 @@ class _AssignmentsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (assignments.isEmpty) {
-      return const Center(child: Text('Нет заданий для этой группы'));
+      return Center(child: Text('groups.noGroupAssignments'.tr()));
     }
     return ListView.builder(
       itemCount: assignments.length,
@@ -297,7 +298,7 @@ class _AddMemberSheetState extends State<_AddMemberSheet> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Добавить спортсмена',
+              'connections.addAthlete'.tr(),
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
@@ -306,7 +307,7 @@ class _AddMemberSheetState extends State<_AddMemberSheet> {
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : _available.isEmpty
-                      ? const Center(child: Text('Все спортсмены уже в группе'))
+                      ? Center(child: Text('groups.allAthletesInGroup'.tr()))
                       : ListView.builder(
                           controller: scrollController,
                           itemCount: _available.length,

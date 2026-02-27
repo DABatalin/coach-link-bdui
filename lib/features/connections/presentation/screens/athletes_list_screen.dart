@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/repository_providers.dart';
 import '../bloc/athletes_bloc.dart';
@@ -26,15 +27,15 @@ class _AthletesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Мои спортсмены')),
+      appBar: AppBar(title: Text('connections.myAthletes'.tr())),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
-              decoration: const InputDecoration(
-                hintText: 'Поиск по ФИО или логину',
-                prefixIcon: Icon(Icons.search),
+              decoration: InputDecoration(
+                hintText: 'common.search'.tr(),
+                prefixIcon: const Icon(Icons.search),
               ),
               onChanged: (value) => context
                   .read<AthletesBloc>()
@@ -49,7 +50,7 @@ class _AthletesView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     ),
                   AthletesLoaded(:final athletes) => athletes.isEmpty
-                      ? const Center(child: Text('Нет спортсменов'))
+                      ? Center(child: Text('connections.noAthletes'.tr()))
                       : ListView.builder(
                           itemCount: athletes.length,
                           itemBuilder: (context, index) {
@@ -81,7 +82,7 @@ class _AthletesView extends StatelessWidget {
                             onPressed: () => context
                                 .read<AthletesBloc>()
                                 .add(const AthletesLoadRequested()),
-                            child: const Text('Повторить'),
+                            child: Text('common.retry'.tr()),
                           ),
                         ],
                       ),

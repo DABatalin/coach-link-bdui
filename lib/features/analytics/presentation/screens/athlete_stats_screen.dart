@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +30,7 @@ class _AthleteStatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Статистика')),
+      appBar: AppBar(title: Text('analytics.title'.tr())),
       body: BlocBuilder<AthleteStatsBloc, AthleteStatsState>(
         builder: (context, state) => switch (state) {
           AthleteStatsInitial() ||
@@ -52,7 +53,7 @@ class _AthleteStatsView extends StatelessWidget {
                     onPressed: () => context
                         .read<AthleteStatsBloc>()
                         .add(AthleteStatsLoadRequested(athleteId)),
-                    child: const Text('Повторить'),
+                    child: Text('common.retry'.tr()),
                   ),
                 ],
               ),
@@ -104,7 +105,7 @@ class _SummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Сводка', style: Theme.of(context).textTheme.titleMedium),
+            Text('analytics.summary'.tr(), style: Theme.of(context).textTheme.titleMedium),
             const Divider(height: 20),
             Wrap(
               spacing: 16,
@@ -112,33 +113,33 @@ class _SummaryCard extends StatelessWidget {
               children: [
                 _StatChip(
                   icon: Icons.fitness_center,
-                  label: 'Тренировок',
+                  label: 'analytics.workouts'.tr(),
                   value: '${summary.totalWorkouts}',
                 ),
                 _StatChip(
                   icon: Icons.timer,
-                  label: 'Всего минут',
+                  label: 'analytics.totalMinutes'.tr(),
                   value: '${summary.totalMinutes}',
                 ),
                 _StatChip(
                   icon: Icons.speed,
-                  label: 'Ср. RPE',
+                  label: 'analytics.avgRpe'.tr(),
                   value: summary.avgRpe.toStringAsFixed(1),
                 ),
                 if (summary.avgHeartRate != null)
                   _StatChip(
                     icon: Icons.favorite,
-                    label: 'Ср. пульс',
-                    value: '${summary.avgHeartRate} уд/мин',
+                    label: 'analytics.avgHeartRate'.tr(),
+                    value: '${summary.avgHeartRate}${'analytics.bpm'.tr()}',
                   ),
                 _StatChip(
                   icon: Icons.straighten,
-                  label: 'Дистанция',
-                  value: '${summary.totalDistanceKm.toStringAsFixed(1)} км',
+                  label: 'analytics.distance'.tr(),
+                  value: '${summary.totalDistanceKm.toStringAsFixed(1)}${'analytics.km'.tr()}',
                 ),
                 _StatChip(
                   icon: Icons.check_circle_outline,
-                  label: 'Выполнение',
+                  label: 'analytics.completion'.tr(),
                   value: '$completionPct%',
                   color: completionPct >= 80
                       ? Colors.green
@@ -208,10 +209,10 @@ class _PeriodSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Период:', style: Theme.of(context).textTheme.titleSmall),
+        Text('analytics.period'.tr(), style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(width: 12),
         ChoiceChip(
-          label: const Text('Недели'),
+          label: Text('analytics.weeks'.tr()),
           selected: current == 'week',
           onSelected: (_) => context
               .read<AthleteStatsBloc>()
@@ -219,7 +220,7 @@ class _PeriodSelector extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         ChoiceChip(
-          label: const Text('Месяцы'),
+          label: Text('analytics.months'.tr()),
           selected: current == 'month',
           onSelected: (_) => context
               .read<AthleteStatsBloc>()
@@ -237,7 +238,7 @@ class _ProgressChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (points.isEmpty) {
-      return const Center(child: Text('Нет данных за период'));
+      return Center(child: Text('analytics.noDataForPeriod'.tr()));
     }
 
     final maxWorkouts =
@@ -249,7 +250,7 @@ class _ProgressChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Прогресс (тренировки)',
+            Text('analytics.progress'.tr(),
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 16),
             SizedBox(
@@ -307,7 +308,7 @@ class _ProgressChart extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodySmall)),
                       Expanded(
                           child: Text(
-                              '${p.totalMinutes} мин · RPE ${p.avgRpe.toStringAsFixed(1)} · ${p.totalDistanceKm.toStringAsFixed(1)} км',
+                              '${p.totalMinutes}${'analytics.min'.tr()} · ${'analytics.rpe'.tr()} ${p.avgRpe.toStringAsFixed(1)} · ${p.totalDistanceKm.toStringAsFixed(1)}${'analytics.km'.tr()}',
                               style: Theme.of(context).textTheme.bodySmall)),
                     ],
                   ),

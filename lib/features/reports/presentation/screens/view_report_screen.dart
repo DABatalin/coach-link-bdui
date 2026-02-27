@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,7 @@ class _ViewReportView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Отчёт')),
+      appBar: AppBar(title: Text('reports.report'.tr())),
       body: BlocBuilder<ViewReportBloc, ViewReportState>(
         builder: (context, state) {
           return switch (state) {
@@ -53,35 +54,35 @@ class _ViewReportView extends StatelessWidget {
                   ],
                   _InfoRow(
                     icon: Icons.timer,
-                    label: 'Длительность',
-                    value: '${report.durationMinutes} мин',
+                    label: 'reports.duration'.tr(),
+                    value: '${report.durationMinutes}${'reports.minutes'.tr()}',
                   ),
                   _InfoRow(
                     icon: Icons.speed,
-                    label: 'RPE (самочувствие)',
+                    label: 'reports.rpe'.tr(),
                     value: '${report.perceivedEffort} / 10',
                   ),
                   if (report.maxHeartRate != null)
                     _InfoRow(
                       icon: Icons.favorite,
-                      label: 'Макс. пульс',
-                      value: '${report.maxHeartRate} уд/мин',
+                      label: 'reports.maxHeartRate'.tr(),
+                      value: '${report.maxHeartRate}${'reports.bpm'.tr()}',
                     ),
                   if (report.avgHeartRate != null)
                     _InfoRow(
                       icon: Icons.favorite_border,
-                      label: 'Сред. пульс',
-                      value: '${report.avgHeartRate} уд/мин',
+                      label: 'reports.avgHeartRate'.tr(),
+                      value: '${report.avgHeartRate}${'reports.bpm'.tr()}',
                     ),
                   if (report.distanceKm != null)
                     _InfoRow(
                       icon: Icons.straighten,
-                      label: 'Дистанция',
-                      value: '${report.distanceKm} км',
+                      label: 'reports.distance'.tr(),
+                      value: '${report.distanceKm}${'reports.km'.tr()}',
                     ),
                   const Divider(height: 24),
                   Text(
-                    'Комментарий',
+                    'reports.comment'.tr(),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
@@ -101,7 +102,7 @@ class _ViewReportView extends StatelessWidget {
                       onPressed: () => context
                           .read<ViewReportBloc>()
                           .add(ViewReportLoadRequested(assignmentId)),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

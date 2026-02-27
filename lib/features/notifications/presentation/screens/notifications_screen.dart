@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/auth/auth_state.dart';
 import '../../../../core/di/auth_providers.dart';
@@ -56,7 +57,7 @@ class _NotificationsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Уведомления'),
+        title: Text('notifications.title'.tr()),
         actions: [
           BlocBuilder<NotificationsBloc, NotificationsState>(
             builder: (context, state) {
@@ -65,8 +66,8 @@ class _NotificationsView extends StatelessWidget {
                   onPressed: () => context
                       .read<NotificationsBloc>()
                       .add(const AllNotificationsMarkedRead()),
-                  child: const Text('Прочитать все',
-                      style: TextStyle(color: Colors.white)),
+                  child: Text('notifications.markAllRead'.tr(),
+                      style: const TextStyle(color: Colors.white)),
                 );
               }
               return const SizedBox.shrink();
@@ -82,7 +83,7 @@ class _NotificationsView extends StatelessWidget {
               const Center(child: CircularProgressIndicator()),
             NotificationsLoaded(:final notifications) =>
               notifications.isEmpty
-                  ? const Center(child: Text('Нет уведомлений'))
+                  ? Center(child: Text('notifications.noNotifications'.tr()))
                   : ListView.builder(
                       itemCount: notifications.length,
                       itemBuilder: (context, index) {
@@ -130,7 +131,7 @@ class _NotificationsView extends StatelessWidget {
                       onPressed: () => context
                           .read<NotificationsBloc>()
                           .add(const NotificationsLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/repository_providers.dart';
 import '../../../../core/navigation/routes.dart';
@@ -27,7 +28,7 @@ class _MyCoachView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Мой тренер')),
+      appBar: AppBar(title: Text('connections.myCoach'.tr())),
       body: BlocBuilder<MyCoachBloc, MyCoachState>(
         builder: (context, state) {
           return switch (state) {
@@ -98,13 +99,13 @@ class _MyCoachView extends StatelessWidget {
                     const Icon(Icons.person_search,
                         size: 64, color: Colors.grey),
                     const SizedBox(height: 16),
-                    const Text('У вас пока нет тренера'),
+                    Text('connections.noCoach'.tr()),
                     const SizedBox(height: 16),
                     ElevatedButton.icon(
                       onPressed: () =>
                           context.go(AppRoutes.athleteFindCoach),
                       icon: const Icon(Icons.search),
-                      label: const Text('Найти тренера'),
+                      label: Text('connections.findCoach'.tr()),
                     ),
                   ],
                 ),
@@ -119,7 +120,7 @@ class _MyCoachView extends StatelessWidget {
                       onPressed: () => context
                           .read<MyCoachBloc>()
                           .add(const MyCoachLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

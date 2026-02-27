@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +26,7 @@ class _RequestsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Входящие заявки')),
+      appBar: AppBar(title: Text('connections.pendingRequests'.tr())),
       body: BlocBuilder<RequestsBloc, RequestsState>(
         builder: (context, state) {
           return switch (state) {
@@ -33,7 +34,7 @@ class _RequestsView extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             RequestsLoaded(:final requests) => requests.isEmpty
-                ? const Center(child: Text('Нет входящих заявок'))
+                ? Center(child: Text('connections.noRequests'.tr()))
                 : ListView.builder(
                     itemCount: requests.length,
                     itemBuilder: (context, index) {
@@ -80,7 +81,7 @@ class _RequestsView extends StatelessWidget {
                       onPressed: () => context
                           .read<RequestsBloc>()
                           .add(const RequestsLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/repository_providers.dart';
 import '../bloc/assignments_bloc.dart';
@@ -25,7 +26,7 @@ class _ArchivedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Архив')),
+      appBar: AppBar(title: Text('training.archived'.tr())),
       body: BlocBuilder<AssignmentsBloc, AssignmentsState>(
         builder: (context, state) {
           return switch (state) {
@@ -33,7 +34,7 @@ class _ArchivedView extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             AssignmentsLoaded(:final assignments) => assignments.isEmpty
-                ? const Center(child: Text('Архив пуст'))
+                ? Center(child: Text('training.archiveEmpty'.tr()))
                 : ListView.builder(
                     itemCount: assignments.length,
                     itemBuilder: (context, index) {

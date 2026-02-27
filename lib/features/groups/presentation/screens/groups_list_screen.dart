@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +31,7 @@ class _GroupsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Группы')),
+      appBar: AppBar(title: Text('groups.title'.tr())),
       floatingActionButton: isCoach
           ? FloatingActionButton(
               onPressed: () => _showCreateDialog(context),
@@ -47,8 +48,8 @@ class _GroupsView extends StatelessWidget {
                 ? Center(
                     child: Text(
                       isCoach
-                          ? 'Нет групп'
-                          : 'Вы не состоите ни в одной группе',
+                          ? 'groups.noGroups'.tr()
+                          : 'groups.notInAnyGroup'.tr(),
                     ),
                   )
                 : ListView.builder(
@@ -60,7 +61,7 @@ class _GroupsView extends StatelessWidget {
                           child: Icon(Icons.groups),
                         ),
                         title: Text(group.name),
-                        subtitle: Text('${group.membersCount} спортсменов'),
+                        subtitle: Text('${group.membersCount}${'groups.athletes'.tr()}'),
                         trailing: isCoach
                             ? const Icon(Icons.chevron_right)
                             : null,
@@ -80,7 +81,7 @@ class _GroupsView extends StatelessWidget {
                       onPressed: () => context
                           .read<GroupsBloc>()
                           .add(const GroupsLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),
@@ -96,19 +97,19 @@ class _GroupsView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Новая группа'),
+        title: Text('groups.newGroup'.tr()),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(
-            labelText: 'Название группы',
-            hintText: 'Например: Спринтеры U18',
+          decoration: InputDecoration(
+            labelText: 'groups.groupName'.tr(),
+            hintText: 'groups.groupNameHint'.tr(),
           ),
           autofocus: true,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () {
@@ -118,7 +119,7 @@ class _GroupsView extends StatelessWidget {
                 Navigator.pop(dialogContext);
               }
             },
-            child: const Text('Создать'),
+            child: Text('common.create'.tr()),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +40,7 @@ class _AthleteDetailView extends StatelessWidget {
             title: Text(
               state is AthleteDetailLoaded
                   ? state.athleteInfo.fullName
-                  : 'Спортсмен',
+                  : 'connections.athlete'.tr(),
             ),
             actions: [
               if (state is AthleteDetailLoaded) ...[
@@ -47,20 +48,20 @@ class _AthleteDetailView extends StatelessWidget {
                   icon: const Icon(Icons.bar_chart),
                   onPressed: () =>
                       context.go('/coach/athletes/$athleteId/stats'),
-                  tooltip: 'Статистика',
+                  tooltip: 'analytics.title'.tr(),
                 ),
                 IconButton(
                   icon: const Icon(Icons.psychology),
                   onPressed: () =>
                       context.go('/coach/athletes/$athleteId/ai'),
-                  tooltip: 'ИИ-анализ',
+                  tooltip: 'connections.aiAnalysis'.tr(),
                 ),
                 IconButton(
                   icon: const Icon(Icons.refresh),
                   onPressed: () => context
                       .read<AthleteDetailBloc>()
                       .add(const AthleteDetailRefreshRequested()),
-                  tooltip: 'Обновить',
+                  tooltip: 'ai.refresh'.tr(),
                 ),
               ],
             ],
@@ -113,7 +114,7 @@ class _AthleteDetailView extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'Подключён: ${_formatDate(athleteInfo.connectedAt)}',
+                                    '${'connections.connected'.tr()} ${_formatDate(athleteInfo.connectedAt)}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -132,15 +133,15 @@ class _AthleteDetailView extends StatelessWidget {
 
                     // Assignments section
                     Text(
-                      'Задания',
+                      'training.assignments'.tr(),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
                     assignments.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Padding(
-                              padding: EdgeInsets.all(32),
-                              child: Text('Нет заданий'),
+                              padding: const EdgeInsets.all(32),
+                              child: Text('training.noAssignments'.tr()),
                             ),
                           )
                         : ListView.builder(
@@ -189,7 +190,7 @@ class _AthleteDetailView extends StatelessWidget {
                       onPressed: () => context
                           .read<AthleteDetailBloc>()
                           .add(const AthleteDetailRefreshRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),
@@ -207,11 +208,11 @@ class _AthleteDetailView extends StatelessWidget {
   String _getStatusText(String status) {
     switch (status) {
       case 'assigned':
-        return 'Назначено';
+        return 'training.assigned'.tr();
       case 'completed':
-        return 'Выполнено';
+        return 'training.completed'.tr();
       case 'archived':
-        return 'В архиве';
+        return 'training.inArchive'.tr();
       default:
         return status;
     }

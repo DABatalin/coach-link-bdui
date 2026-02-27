@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -74,7 +75,7 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Создать план')),
+      appBar: AppBar(title: Text('training.createPlan'.tr())),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -84,30 +85,30 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Название тренировки',
-                  hintText: 'Например: Развивающий кросс',
+                decoration: InputDecoration(
+                  labelText: 'training.trainingTitle'.tr(),
+                  hintText: 'training.trainingTitleHint'.tr(),
                 ),
                 validator: (v) =>
-                    v == null || v.trim().isEmpty ? 'Введите название' : null,
+                    v == null || v.trim().isEmpty ? 'training.enterTitle'.tr() : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Описание тренировки',
-                  hintText: 'Подробное описание задания...',
+                decoration: InputDecoration(
+                  labelText: 'training.trainingDescription'.tr(),
+                  hintText: 'training.trainingDescriptionHint'.tr(),
                   alignLabelWithHint: true,
                 ),
                 maxLines: 6,
                 validator: (v) =>
-                    v == null || v.trim().isEmpty ? 'Введите описание' : null,
+                    v == null || v.trim().isEmpty ? 'training.enterDescription'.tr() : null,
               ),
               const SizedBox(height: 16),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.calendar_today),
-                title: const Text('Дата тренировки'),
+                title: Text('training.trainingDate'.tr()),
                 subtitle: Text(
                   '${_selectedDate.day.toString().padLeft(2, '0')}.${_selectedDate.month.toString().padLeft(2, '0')}.${_selectedDate.year}',
                 ),
@@ -116,20 +117,20 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
               const SizedBox(height: 16),
               const Divider(),
               const SizedBox(height: 8),
-              Text('Назначить для',
+              Text('training.assignTo'.tr(),
                   style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
               SegmentedButton<_TargetMode>(
-                segments: const [
+                segments: [
                   ButtonSegment(
                     value: _TargetMode.athletes,
-                    label: Text('Спортсмены'),
-                    icon: Icon(Icons.person),
+                    label: Text('connections.athletes'.tr()),
+                    icon: const Icon(Icons.person),
                   ),
                   ButtonSegment(
                     value: _TargetMode.group,
-                    label: Text('Группа'),
-                    icon: Icon(Icons.group),
+                    label: Text('training.group'.tr()),
+                    icon: const Icon(Icons.group),
                   ),
                 ],
                 selected: {_targetMode},
@@ -155,7 +156,7 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text('Создать и назначить'),
+                    : Text('training.createAndAssign'.tr()),
               ),
             ],
           ),
@@ -166,9 +167,9 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
 
   Widget _buildAthletesList() {
     if (_athletes.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Text('Нет подключённых спортсменов'),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text('training.noConnectedAthletes'.tr()),
       );
     }
     return Column(
@@ -195,9 +196,9 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
 
   Widget _buildGroupsList() {
     if (_groups.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Text('Нет созданных групп'),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text('training.noGroups'.tr()),
       );
     }
     return Column(
@@ -205,7 +206,7 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
         return RadioListTile<String>(
           contentPadding: EdgeInsets.zero,
           title: Text(g.name),
-          subtitle: Text('${g.membersCount} чел.'),
+          subtitle: Text('${g.membersCount}${'training.people'.tr()}'),
           value: g.id,
           groupValue: _selectedGroupId,
           onChanged: (v) => setState(() => _selectedGroupId = v),
@@ -237,8 +238,8 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
         ..showSnackBar(SnackBar(
           content: Text(
             _targetMode == _TargetMode.athletes
-                ? 'Выберите хотя бы одного спортсмена'
-                : 'Выберите группу',
+                ? 'training.selectAtLeastOneAthlete'.tr()
+                : 'training.selectGroup'.tr(),
           ),
         ));
       return;
@@ -261,8 +262,8 @@ class _CreatePlanScreenState extends ConsumerState<CreatePlanScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(
-            content: Text('Не удалось создать план'),
+          ..showSnackBar(SnackBar(
+            content: Text('training.failedToCreatePlan'.tr()),
           ));
       }
     } finally {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/analytics_providers.dart';
 import '../../../../core/di/auth_providers.dart';
@@ -56,7 +57,7 @@ class _RegisterViewState extends State<_RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Регистрация'),
+        title: Text('auth.register'.tr()),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/login'),
@@ -83,7 +84,7 @@ class _RegisterViewState extends State<_RegisterView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Выберите роль',
+                    'auth.selectRole'.tr(),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 12),
@@ -95,32 +96,32 @@ class _RegisterViewState extends State<_RegisterView> {
                   const SizedBox(height: 24),
                   TextFormField(
                     controller: _fullNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'ФИО',
-                      prefixIcon: Icon(Icons.badge_outlined),
+                    decoration: InputDecoration(
+                      labelText: 'auth.fullName'.tr(),
+                      prefixIcon: const Icon(Icons.badge_outlined),
                     ),
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.words,
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty) return 'Введите ФИО';
-                      if (v.trim().length < 2) return 'Минимум 2 символа';
+                      if (v == null || v.trim().isEmpty) return 'auth.enterFullName'.tr();
+                      if (v.trim().length < 2) return 'auth.min2Chars'.tr();
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _loginController,
-                    decoration: const InputDecoration(
-                      labelText: 'Логин',
-                      prefixIcon: Icon(Icons.person_outline),
-                      helperText: 'Латинские буквы, цифры и дефис',
+                    decoration: InputDecoration(
+                      labelText: 'auth.username'.tr(),
+                      prefixIcon: const Icon(Icons.person_outline),
+                      helperText: 'auth.loginHelper'.tr(),
                     ),
                     textInputAction: TextInputAction.next,
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Введите логин';
-                      if (v.length < 3) return 'Минимум 3 символа';
+                      if (v == null || v.isEmpty) return 'auth.enterUsername'.tr();
+                      if (v.length < 3) return 'auth.min3Chars'.tr();
                       if (!RegExp(r'^[a-zA-Z0-9-]+$').hasMatch(v)) {
-                        return 'Только латинские буквы, цифры и дефис';
+                        return 'auth.onlyLatinChars'.tr();
                       }
                       return null;
                     },
@@ -128,15 +129,15 @@ class _RegisterViewState extends State<_RegisterView> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email_outlined),
+                    decoration: InputDecoration(
+                      labelText: 'auth.email'.tr(),
+                      prefixIcon: const Icon(Icons.email_outlined),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Введите email';
-                      if (!v.contains('@')) return 'Некорректный email';
+                      if (v == null || v.isEmpty) return 'auth.enterEmail'.tr();
+                      if (!v.contains('@')) return 'auth.invalidEmail'.tr();
                       return null;
                     },
                   ),
@@ -144,9 +145,9 @@ class _RegisterViewState extends State<_RegisterView> {
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
-                      labelText: 'Пароль',
+                      labelText: 'auth.password'.tr(),
                       prefixIcon: const Icon(Icons.lock_outline),
-                      helperText: 'Минимум 8 символов',
+                      helperText: 'auth.passwordHelper'.tr(),
                       suffixIcon: IconButton(
                         icon: Icon(_obscurePassword
                             ? Icons.visibility_off
@@ -159,8 +160,8 @@ class _RegisterViewState extends State<_RegisterView> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _submit(),
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Введите пароль';
-                      if (v.length < 8) return 'Минимум 8 символов';
+                      if (v == null || v.isEmpty) return 'auth.enterPassword'.tr();
+                      if (v.length < 8) return 'auth.min8Chars'.tr();
                       return null;
                     },
                   ),
@@ -179,14 +180,14 @@ class _RegisterViewState extends State<_RegisterView> {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Text('Зарегистрироваться'),
+                            : Text('auth.register'.tr()),
                       );
                     },
                   ),
                   const SizedBox(height: 16),
                   TextButton(
                     onPressed: () => context.go('/login'),
-                    child: const Text('Уже есть аккаунт? Войти'),
+                    child: Text('auth.hasAccountLogin'.tr()),
                   ),
                 ],
               ),
@@ -201,7 +202,7 @@ class _RegisterViewState extends State<_RegisterView> {
     if (_selectedRole == null) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(const SnackBar(content: Text('Выберите роль')));
+        ..showSnackBar(SnackBar(content: Text('auth.selectRoleError'.tr())));
       return;
     }
     if (!_formKey.currentState!.validate()) return;

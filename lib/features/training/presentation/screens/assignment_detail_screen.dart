@@ -1,4 +1,5 @@
 import 'package:bdui_kit/bdui_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,7 @@ class _AssignmentDetailView extends StatelessWidget {
         final title = switch (state) {
           AssignmentDetailLoaded(:final assignment) => assignment.title,
           AssignmentDetailWithBdui(:final assignment) => assignment.title,
-          _ => 'Задание',
+          _ => 'training.assignment'.tr(),
         };
 
         return Scaffold(
@@ -82,7 +83,7 @@ class _AssignmentDetailView extends StatelessWidget {
                       onPressed: () => context
                           .read<AssignmentDetailBloc>()
                           .add(AssignmentDetailLoadRequested(assignmentId)),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),
@@ -109,12 +110,12 @@ class _AssignmentDetailView extends StatelessWidget {
               Chip(
                 label: Text(
                   assignment.isOverdue
-                      ? 'Просрочено'
+                      ? 'training.overdue'.tr()
                       : assignment.status == 'completed'
-                          ? 'Выполнено'
+                          ? 'training.completed'.tr()
                           : assignment.status == 'archived'
-                              ? 'В архиве'
-                              : 'Назначено',
+                              ? 'training.inArchive'.tr()
+                              : 'training.assigned'.tr(),
                 ),
                 backgroundColor: assignment.isOverdue
                     ? const Color.fromARGB(255, 165, 79, 92)
@@ -134,14 +135,14 @@ class _AssignmentDetailView extends StatelessWidget {
           // Athlete/Coach info
           if (isCoach && assignment.athleteFullName != null) ...[
             Text(
-              'Спортсмен: ${assignment.athleteFullName}',
+              '${'training.athlete'.tr()} ${assignment.athleteFullName}',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 8),
           ],
           if (!isCoach && assignment.coachFullName != null) ...[
             Text(
-              'Тренер: ${assignment.coachFullName}',
+              '${'training.coach'.tr()} ${assignment.coachFullName}',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 8),
@@ -151,7 +152,7 @@ class _AssignmentDetailView extends StatelessWidget {
 
           // Description
           Text(
-            'Описание тренировки',
+            'training.trainingDescription'.tr(),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -186,7 +187,7 @@ class _AssignmentDetailView extends StatelessWidget {
                 '/athlete/assignments/${assignment.id}/report/submit',
               ),
               icon: const Icon(Icons.edit_note),
-              label: const Text('Отправить отчёт'),
+              label: Text('training.submitReport'.tr()),
             ),
           if (isCoach && assignment.hasReport)
             OutlinedButton.icon(
@@ -194,7 +195,7 @@ class _AssignmentDetailView extends StatelessWidget {
                 '/coach/assignments/${assignment.id}/report',
               ),
               icon: const Icon(Icons.description),
-              label: const Text('Просмотреть отчёт'),
+              label: Text('training.viewReport'.tr()),
             ),
         ],
       ),

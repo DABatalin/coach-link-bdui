@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +26,7 @@ class _AiSummaryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ИИ-сводка команды')),
+      appBar: AppBar(title: Text('ai.teamSummary'.tr())),
       body: BlocBuilder<AiSummaryBloc, AiSummaryState>(
         builder: (context, state) => switch (state) {
           AiSummaryInitial() => _InitialView(
@@ -57,7 +58,7 @@ class _AiSummaryView extends StatelessWidget {
                       onPressed: () => context
                           .read<AiSummaryBloc>()
                           .add(const AiSummaryRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),
@@ -84,8 +85,7 @@ class _InitialView extends StatelessWidget {
             Icon(Icons.groups_outlined, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'ИИ соберёт отчёты всех спортсменов за последние 7 дней '
-              'и выделит ключевые тенденции, проблемы и рекомендации.',
+              'ai.teamSummaryHint'.tr(),
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
@@ -94,7 +94,7 @@ class _InitialView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Модель: gemma3:4b · ~3 мин на CPU',
+              'ai.teamModelInfo'.tr(),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -104,7 +104,7 @@ class _InitialView extends StatelessWidget {
             FilledButton.icon(
               onPressed: onRequest,
               icon: const Icon(Icons.auto_awesome),
-              label: const Text('Сгенерировать сводку'),
+              label: Text('ai.generateSummary'.tr()),
             ),
           ],
         ),
@@ -125,7 +125,7 @@ class _LoadingView extends StatelessWidget {
           const CircularProgressIndicator(),
           const SizedBox(height: 16),
           Text(
-            'ИИ анализирует отчёты команды…',
+            'ai.analyzingTeam'.tr(),
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium
@@ -133,7 +133,7 @@ class _LoadingView extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Это может занять до 3 минут',
+            'ai.mayTakeTimeTeam'.tr(),
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -182,7 +182,7 @@ class _ResultView extends StatelessWidget {
                     ?.copyWith(color: Colors.grey[600]),
               ),
             ),
-            TextButton(onPressed: onRefresh, child: const Text('Обновить')),
+            TextButton(onPressed: onRefresh, child: Text('ai.refresh'.tr())),
           ],
         ),
         const SizedBox(height: 12),

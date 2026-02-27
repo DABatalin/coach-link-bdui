@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/analytics_providers.dart';
 import '../../../../core/di/auth_providers.dart';
@@ -86,7 +87,7 @@ class _LoginViewState extends State<_LoginView> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Войдите в аккаунт',
+                      'auth.loginTitle'.tr(),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Colors.grey[600],
@@ -95,19 +96,19 @@ class _LoginViewState extends State<_LoginView> {
                     const SizedBox(height: 40),
                     TextFormField(
                       controller: _loginController,
-                      decoration: const InputDecoration(
-                        labelText: 'Логин',
-                        prefixIcon: Icon(Icons.person_outline),
+                      decoration: InputDecoration(
+                        labelText: 'auth.username'.tr(),
+                        prefixIcon: const Icon(Icons.person_outline),
                       ),
                       textInputAction: TextInputAction.next,
                       validator: (v) =>
-                          v == null || v.isEmpty ? 'Введите логин' : null,
+                          v == null || v.isEmpty ? 'auth.enterUsername'.tr() : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
                       decoration: InputDecoration(
-                        labelText: 'Пароль',
+                        labelText: 'auth.password'.tr(),
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(_obscurePassword
@@ -121,7 +122,7 @@ class _LoginViewState extends State<_LoginView> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _submit(),
                       validator: (v) =>
-                          v == null || v.isEmpty ? 'Введите пароль' : null,
+                          v == null || v.isEmpty ? 'auth.enterPassword'.tr() : null,
                     ),
                     const SizedBox(height: 24),
                     BlocBuilder<LoginBloc, LoginState>(
@@ -138,14 +139,14 @@ class _LoginViewState extends State<_LoginView> {
                                     color: Colors.white,
                                   ),
                                 )
-                              : const Text('Войти'),
+                              : Text('auth.login'.tr()),
                         );
                       },
                     ),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () => context.go('/register'),
-                      child: const Text('Нет аккаунта? Зарегистрироваться'),
+                      child: Text('auth.noAccountRegister'.tr()),
                     ),
                   ],
                 ),

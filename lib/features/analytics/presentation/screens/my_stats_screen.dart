@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,7 @@ class _MyStatsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Моя статистика')),
+      appBar: AppBar(title: Text('analytics.myStats'.tr())),
       body: BlocBuilder<MyStatsBloc, MyStatsState>(
         builder: (context, state) => switch (state) {
           MyStatsInitial() ||
@@ -49,7 +50,7 @@ class _MyStatsView extends StatelessWidget {
                     onPressed: () => context
                         .read<MyStatsBloc>()
                         .add(const MyStatsLoadRequested()),
-                    child: const Text('Повторить'),
+                    child: Text('common.retry'.tr()),
                   ),
                 ],
               ),
@@ -99,22 +100,22 @@ class _SummarySection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Итоги', style: Theme.of(context).textTheme.titleMedium),
+            Text('analytics.results'.tr(), style: Theme.of(context).textTheme.titleMedium),
             const Divider(height: 20),
-            _Row(icon: Icons.fitness_center, label: 'Тренировок',
+            _Row(icon: Icons.fitness_center, label: 'analytics.workouts'.tr(),
                 value: '${summary.totalWorkouts}'),
-            _Row(icon: Icons.timer, label: 'Всего минут',
+            _Row(icon: Icons.timer, label: 'analytics.totalMinutes'.tr(),
                 value: '${summary.totalMinutes}'),
-            _Row(icon: Icons.straighten, label: 'Дистанция',
-                value: '${summary.totalDistanceKm.toStringAsFixed(1)} км'),
-            _Row(icon: Icons.speed, label: 'Ср. RPE',
+            _Row(icon: Icons.straighten, label: 'analytics.distance'.tr(),
+                value: '${summary.totalDistanceKm.toStringAsFixed(1)}${'analytics.km'.tr()}'),
+            _Row(icon: Icons.speed, label: 'analytics.avgRpe'.tr(),
                 value: summary.avgRpe.toStringAsFixed(1)),
             if (summary.avgHeartRate != null)
-              _Row(icon: Icons.favorite, label: 'Ср. пульс',
-                  value: '${summary.avgHeartRate} уд/мин'),
+              _Row(icon: Icons.favorite, label: 'analytics.avgHeartRate'.tr(),
+                  value: '${summary.avgHeartRate}${'analytics.bpm'.tr()}'),
             _Row(
               icon: Icons.check_circle_outline,
-              label: 'Выполнение заданий',
+              label: 'analytics.completionRate'.tr(),
               value: '$completionPct%',
               valueColor: completionPct >= 80
                   ? Colors.green
@@ -173,10 +174,10 @@ class _PeriodSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Период:', style: Theme.of(context).textTheme.titleSmall),
+        Text('analytics.period'.tr(), style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(width: 12),
         ChoiceChip(
-          label: const Text('Недели'),
+          label: Text('analytics.weeks'.tr()),
           selected: current == 'week',
           onSelected: (_) => context
               .read<MyStatsBloc>()
@@ -184,7 +185,7 @@ class _PeriodSelector extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         ChoiceChip(
-          label: const Text('Месяцы'),
+          label: Text('analytics.months'.tr()),
           selected: current == 'month',
           onSelected: (_) => context
               .read<MyStatsBloc>()
@@ -202,7 +203,7 @@ class _ProgressSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (points.isEmpty) {
-      return const Center(child: Text('Нет данных за период'));
+      return Center(child: Text('analytics.noDataForPeriod'.tr()));
     }
 
     final maxWorkouts =
@@ -214,7 +215,7 @@ class _ProgressSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Динамика', style: Theme.of(context).textTheme.titleMedium),
+            Text('analytics.dynamics'.tr(), style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 16),
             SizedBox(
               height: 120,

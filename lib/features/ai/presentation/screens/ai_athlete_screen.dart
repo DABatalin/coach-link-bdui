@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,11 +31,11 @@ class _AiAthleteView extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('ИИ-анализ'),
-          bottom: const TabBar(
+          title: Text('ai.analysis'.tr()),
+          bottom: TabBar(
             tabs: [
-              Tab(text: 'Рекомендации'),
-              Tab(text: 'Анализ'),
+              Tab(text: 'ai.recommendations'.tr()),
+              Tab(text: 'ai.analysis'.tr()),
             ],
           ),
         ),
@@ -43,16 +44,14 @@ class _AiAthleteView extends StatelessWidget {
             _AiTab(
               athleteId: athleteId,
               type: 'recommendations',
-              buttonLabel: 'Получить рекомендации',
-              hint: 'ИИ проанализирует статистику спортсмена и предложит '
-                  'корректировки тренировочного процесса.',
+              buttonLabel: 'ai.getRecommendations'.tr(),
+              hint: 'ai.recommendationsHint'.tr(),
             ),
             _AiTab(
               athleteId: athleteId,
               type: 'analysis',
-              buttonLabel: 'Запустить анализ',
-              hint: 'ИИ выявит тенденции: рост нагрузки, динамику пульса, '
-                  'признаки перетренированности.',
+              buttonLabel: 'ai.startAnalysis'.tr(),
+              hint: 'ai.analysisHint'.tr(),
             ),
           ],
         ),
@@ -152,7 +151,7 @@ class _InitialView extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Модель: gemma3:4b · ~2 мин на CPU',
+              'ai.modelInfo'.tr(),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
@@ -183,7 +182,7 @@ class _LoadingView extends StatelessWidget {
           const CircularProgressIndicator(),
           const SizedBox(height: 16),
           Text(
-            'ИИ анализирует данные…',
+            'ai.analyzing'.tr(),
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium
@@ -191,7 +190,7 @@ class _LoadingView extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Это может занять 1–3 минуты',
+            'ai.mayTakeTime'.tr(),
             style: Theme.of(context)
                 .textTheme
                 .bodySmall
@@ -230,14 +229,14 @@ class _ResultView extends StatelessWidget {
                 size: 16, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 6),
             Text(
-              'Сгенерировано в $hour:$minute · $model',
+              '${'ai.generatedAt'.tr()} $hour:$minute · $model',
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
                   ?.copyWith(color: Colors.grey[600]),
             ),
             const Spacer(),
-            TextButton(onPressed: onRefresh, child: const Text('Обновить')),
+            TextButton(onPressed: onRefresh, child: Text('ai.refresh'.tr())),
           ],
         ),
         const SizedBox(height: 12),
@@ -272,7 +271,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            ElevatedButton(onPressed: onRetry, child: const Text('Повторить')),
+            ElevatedButton(onPressed: onRetry, child: Text('common.retry'.tr())),
           ],
         ),
       ),

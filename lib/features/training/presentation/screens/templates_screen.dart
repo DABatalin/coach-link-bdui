@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../core/di/repository_providers.dart';
 import '../bloc/templates_bloc.dart';
@@ -25,7 +26,7 @@ class _TemplatesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Шаблоны')),
+      appBar: AppBar(title: Text('training.templates'.tr())),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCreateDialog(context),
         child: const Icon(Icons.add),
@@ -37,7 +38,7 @@ class _TemplatesView extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             TemplatesLoaded(:final templates) => templates.isEmpty
-                ? const Center(child: Text('Нет шаблонов'))
+                ? Center(child: Text('training.noTemplates'.tr()))
                 : ListView.builder(
                     itemCount: templates.length,
                     itemBuilder: (context, index) {
@@ -70,7 +71,7 @@ class _TemplatesView extends StatelessWidget {
                       onPressed: () => context
                           .read<TemplatesBloc>()
                           .add(const TemplatesLoadRequested()),
-                      child: const Text('Повторить'),
+                      child: Text('common.retry'.tr()),
                     ),
                   ],
                 ),
@@ -87,19 +88,19 @@ class _TemplatesView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Новый шаблон'),
+        title: Text('training.newTemplate'.tr()),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(labelText: 'Название'),
+              decoration: InputDecoration(labelText: 'training.templateName'.tr()),
               autofocus: true,
             ),
             const SizedBox(height: 12),
             TextField(
               controller: descController,
-              decoration: const InputDecoration(labelText: 'Описание'),
+              decoration: InputDecoration(labelText: 'training.templateDescription'.tr()),
               maxLines: 3,
             ),
           ],
@@ -107,7 +108,7 @@ class _TemplatesView extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Отмена'),
+            child: Text('common.cancel'.tr()),
           ),
           ElevatedButton(
             onPressed: () {
@@ -119,7 +120,7 @@ class _TemplatesView extends StatelessWidget {
                 Navigator.pop(dialogContext);
               }
             },
-            child: const Text('Создать'),
+            child: Text('common.save'.tr()),
           ),
         ],
       ),
