@@ -82,7 +82,7 @@ void main() {
     });
 
     test('stringProp returns value or null', () {
-      final component = BduiComponent(
+      const component = BduiComponent(
         type: 'text',
         properties: {'text': 'Hello'},
         children: [],
@@ -92,7 +92,7 @@ void main() {
     });
 
     test('stringPropOr returns fallback when key missing', () {
-      final component = BduiComponent(
+      const component = BduiComponent(
         type: 'text',
         properties: {},
         children: [],
@@ -101,7 +101,7 @@ void main() {
     });
 
     test('boolProp returns correct value', () {
-      final component = BduiComponent(
+      const component = BduiComponent(
         type: 'button',
         properties: {'full_width': true},
         children: [],
@@ -111,7 +111,7 @@ void main() {
     });
 
     test('intPropOr returns value or fallback', () {
-      final component = BduiComponent(
+      const component = BduiComponent(
         type: 'spacer',
         properties: {'height': 16},
         children: [],
@@ -167,18 +167,18 @@ void main() {
 
   group('BduiAction', () {
     test('NavigateAction fromJson', () {
-      final action = BduiAction.fromJson({'type': 'navigate', 'route': '/home'});
+      final action = BduiAction.fromJson(const {'type': 'navigate', 'route': '/home'});
       expect(action, isA<NavigateAction>());
       expect((action as NavigateAction).route, '/home');
     });
 
     test('RefreshAction fromJson', () {
-      final action = BduiAction.fromJson({'type': 'refresh'});
+      final action = BduiAction.fromJson(const {'type': 'refresh'});
       expect(action, isA<RefreshAction>());
     });
 
     test('ApiCallAction fromJson', () {
-      final action = BduiAction.fromJson({
+      final action = BduiAction.fromJson(const {
         'type': 'api_call',
         'method': 'POST',
         'url': '/api/v1/test',
@@ -189,7 +189,7 @@ void main() {
     });
 
     test('UnknownAction fromJson for unrecognised type', () {
-      final action = BduiAction.fromJson({'type': 'teleport', 'dest': 'moon'});
+      final action = BduiAction.fromJson(const {'type': 'teleport', 'dest': 'moon'});
       expect(action, isA<UnknownAction>());
     });
   });

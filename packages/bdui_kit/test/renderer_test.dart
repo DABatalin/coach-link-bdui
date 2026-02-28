@@ -143,7 +143,7 @@ void main() {
 
   group('BduiRenderer — buildSchema', () {
     testWidgets('renders full schema with nested text', (tester) async {
-      final schema = BduiSchema.fromJson({
+      final schema = BduiSchema.fromJson(const {
         'screen_id': 'test',
         'version': '1.0',
         'root': {
