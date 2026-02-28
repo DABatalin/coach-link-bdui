@@ -31,15 +31,26 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
+      - name: Update CI goldens (push to master only)
+        if: github.event_name == 'push'
+        run: flutter test --update-goldens test/golden_test.dart
+
       - name: Test
         run: flutter test
+
+      - name: Commit updated CI goldens
+        if: github.event_name == 'push'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'ci: update bdui_kit golden files [skip ci]'
+          file_pattern: packages/bdui_kit/test/goldens/ci/**
 
       - name: Upload golden failures
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: bdui_kit-golden-failures
-          path: packages/bdui_kit/test/**/failures/**
+          path: packages/bdui_kit/test/failures/**
           if-no-files-found: ignore
 
   app:
