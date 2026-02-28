@@ -5,12 +5,11 @@ import 'package:coach_link/core/di/repository_providers.dart';
 import 'package:coach_link/features/dashboard/presentation/screens/coach_dashboard_screen.dart';
 import 'package:coach_link/shared/models/paginated_result.dart';
 import 'package:coach_link/shared/models/pagination.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../helpers/mock_repositories.dart';
+import '../helpers/pump_app.dart';
 import '../helpers/test_data.dart';
 
 void main() {
@@ -19,6 +18,10 @@ void main() {
   late MockAuthManager authManager;
   late MockBduiDataProvider bduiProvider;
   late MockBduiActionHandler actionHandler;
+
+  setUpAll(() async {
+    await setupLocalization();
+  });
 
   setUp(() {
     connectionsRepo = MockConnectionsRepository();
@@ -40,7 +43,9 @@ void main() {
     when(() => bduiProvider.getSchema(any())).thenAnswer((_) async => null);
   });
 
-  Widget buildApp() => ProviderScope(
+  Future<void> buildApp(WidgetTester tester) =>
+      tester.pumpLocalizedApp(
+        const CoachDashboardScreen(),
         overrides: [
           connectionsRepositoryProvider.overrideWithValue(connectionsRepo),
           trainingRepositoryProvider.overrideWithValue(trainingRepo),
@@ -48,7 +53,6 @@ void main() {
           bduiDataProviderProvider.overrideWithValue(bduiProvider),
           bduiActionHandlerProvider.overrideWithValue(actionHandler),
         ],
-        child: const MaterialApp(home: CoachDashboardScreen()),
       );
 
   void stubRepos({int athleteCount = 0, int requestsCount = 0}) {
@@ -81,16 +85,14 @@ void main() {
   group('CoachDashboardScreen', () {
     testWidgets('shows greeting with coach name after load', (tester) async {
       stubRepos();
-      await tester.pumpWidget(buildApp());
-      await tester.pumpAndSettle();
+      await buildApp(tester);
 
       expect(find.textContaining('Coach One'), findsOneWidget);
     });
 
     testWidgets('shows athlete count card', (tester) async {
       stubRepos(athleteCount: 3);
-      await tester.pumpWidget(buildApp());
-      await tester.pumpAndSettle();
+      await buildApp(tester);
 
       expect(find.text('Спортсмены'), findsOneWidget);
       expect(find.text('3'), findsOneWidget);
@@ -98,8 +100,7 @@ void main() {
 
     testWidgets('shows pending requests count', (tester) async {
       stubRepos(requestsCount: 2);
-      await tester.pumpWidget(buildApp());
-      await tester.pumpAndSettle();
+      await buildApp(tester);
 
       expect(find.text('Заявки'), findsOneWidget);
       expect(find.text('2'), findsOneWidget);
@@ -108,8 +109,7 @@ void main() {
     testWidgets('shows "Нет заданий" when assignments list is empty',
         (tester) async {
       stubRepos();
-      await tester.pumpWidget(buildApp());
-      await tester.pumpAndSettle();
+      await buildApp(tester);
 
       expect(find.text('Нет заданий'), findsOneWidget);
     });
@@ -121,8 +121,7 @@ void main() {
           makeAssignment(id: 'a1', athleteFullName: 'Athlete One'),
         ]),
       );
-      await tester.pumpWidget(buildApp());
-      await tester.pumpAndSettle();
+      await buildApp(tester);
 
       expect(find.text('Test Assignment a1'), findsOneWidget);
     });

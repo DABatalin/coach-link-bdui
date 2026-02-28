@@ -2,33 +2,37 @@ import 'package:coach_link/core/di/auth_providers.dart';
 import 'package:coach_link/core/di/repository_providers.dart';
 import 'package:coach_link/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../helpers/mock_repositories.dart';
+import '../helpers/pump_app.dart';
 
 void main() {
   late MockAuthRepository authRepo;
   late MockAuthManager authManager;
+
+  setUpAll(() async {
+    await setupLocalization();
+  });
 
   setUp(() {
     authRepo = MockAuthRepository();
     authManager = MockAuthManager();
   });
 
-  Widget buildApp() => ProviderScope(
+  Future<void> buildApp(WidgetTester tester) =>
+      tester.pumpLocalizedApp(
+        const LoginScreen(),
         overrides: [
           authRepositoryProvider.overrideWithValue(authRepo),
           authManagerProvider.overrideWithValue(authManager),
         ],
-        child: const MaterialApp(home: LoginScreen()),
       );
 
   group('LoginScreen', () {
     testWidgets('renders login form with all fields', (tester) async {
-      await tester.pumpWidget(buildApp());
-      await tester.pump();
+      await buildApp(tester);
 
       expect(find.text('CoachLink'), findsOneWidget);
       expect(find.text('Войдите в аккаунт'), findsOneWidget);
@@ -39,8 +43,7 @@ void main() {
 
     testWidgets('shows validation error when login is empty on submit',
         (tester) async {
-      await tester.pumpWidget(buildApp());
-      await tester.pump();
+      await buildApp(tester);
 
       await tester.tap(find.text('Войти'));
       await tester.pump();
@@ -50,8 +53,7 @@ void main() {
 
     testWidgets('shows validation error when password is empty on submit',
         (tester) async {
-      await tester.pumpWidget(buildApp());
-      await tester.pump();
+      await buildApp(tester);
 
       await tester.enterText(
           find.widgetWithText(TextFormField, 'Логин'), 'mylogin');
@@ -63,8 +65,7 @@ void main() {
 
     testWidgets('shows both validation errors when all fields are empty',
         (tester) async {
-      await tester.pumpWidget(buildApp());
-      await tester.pump();
+      await buildApp(tester);
 
       await tester.tap(find.text('Войти'));
       await tester.pump();
@@ -79,8 +80,7 @@ void main() {
             password: any(named: 'password'),
           )).thenAnswer((_) async => throw Exception('skip'));
 
-      await tester.pumpWidget(buildApp());
-      await tester.pump();
+      await buildApp(tester);
 
       await tester.enterText(
           find.widgetWithText(TextFormField, 'Логин'), 'coach1');
@@ -94,8 +94,7 @@ void main() {
     });
 
     testWidgets('shows register navigation link', (tester) async {
-      await tester.pumpWidget(buildApp());
-      await tester.pump();
+      await buildApp(tester);
 
       expect(find.text('Нет аккаунта? Зарегистрироваться'), findsOneWidget);
     });
