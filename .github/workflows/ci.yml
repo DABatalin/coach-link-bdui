@@ -54,6 +54,10 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Install dependencies (bdui_kit)
+        working-directory: packages/bdui_kit
+        run: flutter pub get
+
       - name: Install dependencies
         run: flutter pub get
 

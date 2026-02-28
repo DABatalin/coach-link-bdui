@@ -30,14 +30,14 @@ void main() {
       'emits [Loading, CoachDashboardLoaded] with correct counts',
       build: () {
         when(() => connectionsRepo.getCoachAthletes(pageSize: 1)).thenAnswer(
-          (_) async => PaginatedResult(
+          (_) async => const PaginatedResult(
             items: [],
             pagination: Pagination(
                 page: 1, pageSize: 1, totalItems: 5, totalPages: 5),
           ),
         );
         when(() => connectionsRepo.getIncomingRequests(pageSize: 1)).thenAnswer(
-          (_) async => PaginatedResult(
+          (_) async => const PaginatedResult(
             items: [],
             pagination: Pagination(
                 page: 1, pageSize: 1, totalItems: 2, totalPages: 2),
@@ -133,7 +133,7 @@ void main() {
           return null; // Simulate BDUI not available so we test native path
         });
         when(() => connectionsRepo.getCoachAthletes(pageSize: 1)).thenAnswer(
-          (_) async => PaginatedResult(
+          (_) async => const PaginatedResult(
             items: [],
             pagination: Pagination(
                 page: 1, pageSize: 1, totalItems: 0, totalPages: 0),
