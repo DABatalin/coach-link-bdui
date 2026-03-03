@@ -2,6 +2,8 @@ import 'package:coach_link/core/analytics/analytics_service.dart';
 import 'package:coach_link/core/auth/auth_manager.dart';
 import 'package:coach_link/core/bdui/bdui_action_handler.dart';
 import 'package:coach_link/core/bdui/bdui_data_provider.dart';
+import 'package:coach_link/features/ai/domain/ai_repository.dart';
+import 'package:coach_link/features/analytics/domain/analytics_repository.dart';
 import 'package:coach_link/features/auth/domain/auth_repository.dart';
 import 'package:coach_link/features/connections/domain/connections_repository.dart';
 import 'package:coach_link/features/groups/domain/groups_repository.dart';
@@ -25,6 +27,10 @@ class MockGroupsRepository extends Mock implements GroupsRepository {}
 class MockReportsRepository extends Mock implements ReportsRepository {}
 
 class MockNotificationsRepository extends Mock implements NotificationsRepository {}
+
+class MockAnalyticsRepository extends Mock implements AnalyticsRepository {}
+
+class MockAiRepository extends Mock implements AiRepository {}
 
 class MockAuthManager extends Mock implements AuthManager {}
 

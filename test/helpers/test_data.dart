@@ -1,3 +1,6 @@
+import 'package:coach_link/features/ai/domain/models/ai_result.dart';
+import 'package:coach_link/features/analytics/domain/models/athlete_summary.dart';
+import 'package:coach_link/features/analytics/domain/models/progress_point.dart';
 import 'package:coach_link/features/auth/domain/models/auth_tokens.dart';
 import 'package:coach_link/features/auth/domain/models/user.dart';
 import 'package:coach_link/features/connections/domain/models/athlete_info.dart';
@@ -59,6 +62,7 @@ AssignmentListItem makeAssignment({
   String status = 'pending',
   bool isOverdue = false,
   bool hasReport = false,
+  String? athleteId,
   String? athleteFullName,
 }) =>
     AssignmentListItem(
@@ -70,6 +74,7 @@ AssignmentListItem makeAssignment({
       isOverdue: isOverdue,
       hasReport: hasReport,
       assignedAt: kNow,
+      athleteId: athleteId,
       athleteFullName: athleteFullName,
     );
 
@@ -139,4 +144,41 @@ TrainingTemplate makeTemplate({String id = 't1'}) => TrainingTemplate(
       title: 'Template $id',
       description: 'Description',
       createdAt: kNow,
+    );
+
+AssignmentDetail makeAssignmentDetail({String id = 'a1'}) => AssignmentDetail(
+      id: id,
+      planId: 'p1',
+      title: 'Test Assignment $id',
+      description: 'Do this workout',
+      scheduledDate: kFuture,
+      status: 'pending',
+      isOverdue: false,
+      hasReport: false,
+      assignedAt: kNow,
+    );
+
+AthleteSummary makeAthleteSummary() => const AthleteSummary(
+      totalWorkouts: 10,
+      totalMinutes: 600,
+      avgRpe: 6.5,
+      avgHeartRate: 145,
+      totalDistanceKm: 45.0,
+      completionRate: 0.9,
+    );
+
+ProgressPoint makeProgressPoint({String label = 'Mon'}) => ProgressPoint(
+      label: label,
+      workouts: 2,
+      totalMinutes: 90,
+      avgRpe: 6.0,
+      totalDistanceKm: 8.0,
+    );
+
+AiResult makeAiResult({String type = 'recommendations'}) => AiResult(
+      athleteId: 'ath1',
+      type: type,
+      content: 'AI generated content',
+      generatedAt: kNow,
+      model: 'gpt-4',
     );
